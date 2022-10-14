@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSRIT</title>
+</head>
+<body>
+    <center>
+        <h2>Web Page for testing the data when retrieved from database 2 </h2>
+        {{d_backlogs_1}}
+        <br>
+        <br>
+        {{d_btech_per_1}}
+        <br>
+        <br>
+        {% for i in students1 %}
+            {{i}}
+            <br>
+        {% endfor %}
+        <br>
+        <br>
+        {{d_backlogs_2}}
+        <br>
+        <br>
+        {{d_btech_per_2}}
+        <br>
+        <br>
+        {% for i in students2 %}
+            {{i}}
+            <br>
+        {% endfor %}
+    </center>
+</body>
+</html>

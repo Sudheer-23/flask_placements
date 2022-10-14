@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSRIT</title>
+    <style>
+        div{
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            margin-bottom: 1rem;
+            gap: 10px;
+
+        }
+
+        .upload{
+            padding-top: 10rem;
+        }
+
+        select{
+            padding: 1rem;
+            border-radius: 10px;
+            border-color: blue;
+        }
+        input{
+            padding: 1rem;
+            border: 1px solid;
+        }
+
+        button{
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            border-radius: 20px;
+            border-style: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h2>Web Page for uploading the excel sheet of updated students data and then push into database </h2>
+        <form action="{{url_for('upload_into_updated_students_data')}}" method="POST" enctype="multipart/form-data">
+            {{form.hidden_tag()}}
+            <div class="upload">
+
+                <select name="year" id="year">
+                <option value="">passout year</option>
+                <option value="twenty">2020</option>
+                <option value="twenty-one">2021</option>
+                <option value="twenty-two">2022</option>
+                <option value="twenty-three">2023</option>
+        
+        
+                </select>
+                    
+                <select name="year" id="year">
+                <option value="">Btech year</option>
+                <option value="one">1</option>
+                <option value="two">2</option>
+                <option value="three">3</option>
+                <option value="four">4</option>
+                </select>
+        
+                <select name="branch" id="branch">
+                <option value="">Branch</option>
+                <option value="cse">CSE</option>
+                <option value="ece">ECE</option>
+                <option value="eee">EEE</option>
+                <option value="mech">MECH</option>
+                <option value="civil">CIVIL</option>
+                </select>
+                </div>
+                <div>
+                    {{form.file()}}
+                </div>
+                <div>
+                    {{form.submit()}}
+                </div>
+
+                
+        </form>
+
+    </center>
+    
+</body>
+</html>
