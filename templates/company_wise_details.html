@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSRIT</title>
+    <style>
+        table,td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+
+
+    <nav>
+        <a class="navbar-brand" href="/"> Students Data </a>
+    </nav>
+
+    <br>
+    <br>
+    
+    
+    
+    <div class="row"> 
+    
+    <form action="/update_rounds/{{name}}" method="POST">
+        {{filter}}
+
+        <select name="Rounds" id="filter" required>
+            <option value="">Rounds Filter</option>
+            <option value="Round_1">Round 1</option>
+            <option value="Round_2">Round 2</option>
+            <option value="Round_3">Round 3</option>
+            <option value="Round_4">Round 4</option>
+            <option value="Round_5">Round 5</option>
+            <option value="Round_6">Round 6</option>
+            <option value="Round_7">Round 7</option>
+           
+        </select>
+
+          <br>
+          <br>
+          <br>
+
+        
+        
+    
+        <div class="col-md-10">
+            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        
+                        <td>student_roll_no</td>
+                        <td>student_email</td>
+                        <td>Rounds</td>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in data %}
+                    <tr>
+                        <td>{{student.roll_no}}</td>
+                        <td>{{student.email}}</td>
+                        <td>{{student.rounds}}</td>
+                        
+                        <td width="70">
+                            <input type="checkbox" name="mycheckbox" id="" value="{{student.roll_no}}" >
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    
+        </div>
+        <br>
+        <br>
+        <button type="submit">SUBMIT</button>
+    </form>
+    </div>
+
+    
+</body>
+</html>
+
+
+
+
+
+
+
+

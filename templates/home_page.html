@@ -1,3 +1,8 @@
+<!--
+    This HTML Page is for displaying the form for displaying all the pages in the website
+--> 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +14,9 @@
 <body>
     <center>
         <h2>Home Page</h2>
+        <a href="{{url_for('display_eligibility_filters_form')}}">Display the Filters Form</a>
+        <br>
+        <br>
         <a href="{{url_for('upload_into_students_data')}}">Upload Students Data Excel File(Into DB)</a>
         <br>
         <br>
@@ -21,7 +29,14 @@
         <a href="{{url_for('test2')}}">Page for testing the data present in the database 2(test_2)</a>
         <br>
         <br>
-        <a href="{{url_for('student_table')}}">Page for testing the data with chackboxes(test_3)</a>
+        <a href="{{url_for('display_company_filters_form')}}">Page for entering the company name and its filters(For company logs)</a>
+        <br>
+        <br>
+        <a href="{{url_for('student_table')}}">Page for testing the data with checkboxes(test_3)</a>
+        <hr>
+        <br>
+        <br>
+        <a href="{{url_for('tables')}}">Page for displaying the tables in database</a>
     </center>
     
 </body>

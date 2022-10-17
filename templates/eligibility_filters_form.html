@@ -1,0 +1,296 @@
+<!--
+    This HTML Page is for displaying the form for submiting the filter criteria for displaying the eligible
+    students data.
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME PAGE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+
+        body {
+            margin: 0%;
+            font-family: 'open sans', sans-serif;
+            background: #2c3e50;
+            background-image: url('https://cdn.mos.cms.futurecdn.net/qXsVayNBGNZejBMQeYNiHa.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        nav {
+            position: relative;
+            width: 100%;
+            margin: 0%;
+            background: #34495e;
+            border-radius: 8px;
+            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
+        }
+
+        nav a {
+            font-size: 15px;
+            text-transform: uppercase;
+            color: white;
+            text-decoration: none;
+            line-height: 50px;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            text-align: center;
+        }
+
+        nav .animation {
+            position: absolute;
+            height: 100%;
+            top: 0;
+            z-index: 0;
+            background: #1abc9c;
+            border-radius: 8px;
+            transition: all .5s ease 0s;
+        }
+
+        nav a:nth-child(1) {
+            width: 100px;
+        }
+
+        nav .start-home,
+        a:nth-child(1):hover~.animation {
+            width: 100px;
+            left: 0;
+
+        }
+
+        nav a:nth-child(2) {
+            width: 110px;
+
+        }
+
+        nav a:nth-child(2):hover~.animation {
+            width: 110px;
+            left: 100px;
+        }
+
+        nav a:nth-child(3) {
+            width: 160px;
+        }
+
+        nav a:nth-child(3):hover~.animation {
+            left: 210px;
+            width: 160px;
+        }
+
+        nav a:nth-child(4) {
+            width: 160px;
+        }
+
+        nav a:nth-child(4):hover~.animation {
+            width: 160px;
+            left: 370px;
+        }
+
+        nav a:nth-child(5) {
+            width: 160px;
+        }
+
+        nav a:nth-child(5):hover~.animation {
+            width: 160px;
+            left: 530px;
+        }
+        nav a:nth-child(6) {
+            width: 100px;
+        }
+
+        nav a:nth-child(6):hover~.animation {
+            width: 100px;
+            left: 690px;
+        }
+
+        nav a:nth-child(7) {
+            width: 100px;
+        }
+
+        nav a:nth-child(7):hover~.animation {
+            width: 100px;
+            left: 810px;
+        }
+
+
+        form{
+            justify-content: center;
+            display: flex;
+            text-align: center;
+        }
+        
+        .box{
+            margin-top: 1rem;
+            width: 50%;
+            border: 1px solid black;
+            background:none;
+            height:50%;
+            padding: 5%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px); 
+        }
+        
+        select,input{
+            font-size: 1rem;
+            font-family: monaco;
+            color:white;
+            padding: 15px;
+            width: 25%;
+            border: 2px solid white;
+            border-radius: 5px;
+            margin:3%;
+            background:none;
+        }
+        
+        input{
+            width: 90%;
+            
+        }
+        
+        option{
+            color: black;
+            padding: 1rem;
+        
+        }
+        
+        button{
+            padding: 5px;
+            margin-top: 1%;
+            background: none;
+            border: 2px solid white;
+            color: white;
+            border-radius: 5px;
+        
+        }
+        
+        button:hover{
+            background-color: rgb(92, 220, 255);
+            border: 2px solid  rgb(92, 220, 255);
+        }
+        
+        button:active{
+            background-color: rgb(92, 255, 116);
+            border: 2px solid rgb(92, 255, 116);
+        }
+        
+        
+        #flex{
+            margin-left:30% ;
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Files</a>
+        <a href="#">upload-sheet</a>
+        <a href="#">show-logs</a>
+        <a href="#">students-data</a>
+        <a href="#">Login</a>
+        <a href="#">Register</a>
+        <div class="animation start-home"></div>
+    </nav>
+
+    <h1>FORM FOR ELIGIBILITY FILTERS</h1>
+
+    <form action="{{ url_for('display_eligibility') }}" method="POST">
+      
+        <div class = box>
+          <input type="text" name="company" placeholder="COMPANY NAME" required>
+       <br>
+          <select name="year" id="year" value="one" >
+            <option value="">Year</option>
+            <option value="one">1</option>
+            <option value="two">2</option>
+            <option value="three">3</option>
+            <option value="four">4</option>
+          </select>
+          
+          <label for="branch-selection"></label>
+          <select name="branch" id="branch" value="cse" >
+            <option value="">Branch</option>
+            <option value="cse">CSE</option>
+            <option value="ece">ECE</option>
+            <option value="eee">EEE</option>
+            <option value="mech">MECH</option>
+            <option value="civil">CIVIL</option>
+          </select>
+          
+          <select name="sem" id="sem" value="first" >
+            <option value="">Semester</option>
+            <option value="first">ONE</option>
+            <option value="second">TWO</option>
+          </select>
+           <br>
+        
+          <select name="criteria_btech" id="criteria" value=60.00 required>
+            <option value="">Btech-Percentage</option>
+            <option value=60.00>abv-60%</option>
+            <option value=65.00>abv-65%</option>
+            <option value=70.00>abv-70%</option>
+            <option value=75.00>abv-75%</option>
+            <option value=80.00>abv-80%</option>
+            <option value=85.00>abv-85%</option>
+            <option value=90.00>abv-90%</option>
+            <option value=95.00>abv-95%</option> 
+          </select>
+          
+          <select name="criteria_inter" id="criteria_inter" value=60.00 required>
+            <option value="">Inter-Percentage</option>
+            <option value=60.00>abv-60%</option>
+            <option value=65.00>abv-65%</option>
+            <option value=70.00>abv-70%</option>
+            <option value=75.00>abv-75%</option>
+            <option value=80.00>abv-80%</option>
+            <option value=85.00>abv-85%</option>
+            <option value=90.00>abv-90%</option>
+            <option value=95.00>abv-95%</option> 
+          </select>
+        
+          
+          <select name="criteria_tenth" id="criteria_tenth" value=60.00 required>
+            <option value="">Tenth-Percentage</option>
+            <option value=60.00>abv-60%</option>
+            <option value=65.00>abv-65%</option>
+            <option value=70.00>abv-70%</option>
+            <option value=75.00>abv-75%</option>
+            <option value=80.00>abv-80%</option>
+            <option value=85.00>abv-85%</option>
+            <option value=90.00>abv-90%</option>
+            <option value=95.00>abv-95%</option> 
+          </select><br>
+        <div id = "flex">
+          <select name="backlog-selection" id="backlog-selection" value=0 required>
+            <option value="">Backlogs</option>
+            <option value=0>0</option>
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+            <option value=4>4</option>
+          </select>
+          <br>
+          <select name="gender" id="gender" value="Male" required>
+            <option value="">Gender</option>
+            <option value="Male">MALE</option>
+            <option value="Female">FEMALE</option>
+            <option value="Both">Both</option>
+          </select><br></div>
+          <button type="submit">Show Eligibility</button>
+      </div>
+    
+      </form>
+</body>
+
+</html>
+    
+</body>
+</html>

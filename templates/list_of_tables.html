@@ -1,0 +1,24 @@
+
+<center>
+<table class="content-table" id="myTable">
+        
+    <tr id="header">
+        <th>Tables in DB</th>
+    </tr>
+
+    {% for table in table_names %}
+    <tr>
+        <td>{{table}}</td>
+        <td width="170">
+            <a href="/show_company_table/{{table}}" class="btn btn-danger btn-delete btn-sm">Show Details</a>
+            
+        </td>
+        <td width="170">
+            <a href="/delete_company_table/{{table}}" class="btn btn-danger btn-delete btn-sm">DELETE</a>
+            
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+</center>

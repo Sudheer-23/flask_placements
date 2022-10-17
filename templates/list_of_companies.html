@@ -1,0 +1,35 @@
+<!--
+    This HTML Page is for displaying the list of companies visited and then in each company table we should have the students who are eligible displaying the eligible
+    students data and also the table name should have a rounds column plus the table name should be a combination of 
+    (company name + passoutyear + btech_year).
+-->
+{{table_names}}
+<hr>
+{{t_name}}
+<hr>
+{{c}}
+<hr>
+{{c_em}} 
+<hr> 
+{{c_yr}}
+<hr>
+{{c_btech_yr}}
+<hr>
+{{branches}}
+<hr>
+{{c_per_b}}
+<hr>
+{{c_per_i}}
+<hr>
+{{c_per_t}}
+<hr>
+{{c_b}}
+<hr>
+{{c_gen}}
+<hr>
+{% for i in data %}
+    {{i}}
+    <br>
+{% endfor %}
+                                                 
+                                                

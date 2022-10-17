@@ -1,5 +1,4 @@
 # pandas is a library with which we can perform extraction of  data, sending data to database, reading excel files etc.
-from colorama import Cursor
 import pandas as pd
 
 # importing flask files do that we can implement the functionality for the site
@@ -11,7 +10,7 @@ from wtforms import FileField,SubmitField
 from wtforms.validators import InputRequired
 from werkzeug.utils import secure_filename 
 
-# import OS for uploaidng the files and then store the in the respective folders
+# import OS for uploaidng,deleting the files and then store the in the respective folders
 import os
 
 # import smtplib for semding email
@@ -24,7 +23,7 @@ from datetime import date
 # import these modules for connecting the 
 from flaskext.mysql import MySQL
 import pymysql
-from sqlalchemy  import NUMERIC, Float, Numeric, create_engine
+from sqlalchemy  import Float, Numeric, String, create_engine
 import sqlalchemy
 
 
@@ -51,6 +50,36 @@ class Upload_excel_file(FlaskForm):
 def home():
     return render_template('home_page.html')
 
+@app.route('/display_eligibility_filters_form')
+def display_eligibility_filters_form():
+    return render_template('eligibility_filters_form.html')
+
+@app.route('/display_eligibility',methods = ['GET','POST'])
+def display_eligibility():
+    if request.method == 'GET':
+        pass
+        
+    elif request.method == 'POST':
+
+        c = request.form['company']
+        per_b = request.form['criteria_btech']
+        per_i = request.form['criteria_inter']
+        per_t = request.form['criteria_tenth']
+        b = request.form['backlog-selection']
+        gen = request.form['gender']
+
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        if (gen == 'Male') or (gen == 'Female'):
+            cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_Percentage>={per_i} AND tenth_percentage>={per_t} AND gender='{gen}' AND total_backlogs>={b};".format(per_b=per_b,per_i=per_i,per_t=per_t,gen=gen,b=b))
+        else:
+            cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_percentage>={per_i} AND tenth_percentage>={per_t} AND total_backlogs>={b};".format(per_b=per_b,per_i=per_i,per_t=per_t,b=b))
+        data_eligible = cur.fetchall()
+        con.commit()
+        cur.close()
+        return render_template('eligibility_table.html', data = data_eligible, c = " Eligible Students List For {}".format(c))
+
+
 # This route is for uploading the excel sheet of students data which has to be inserted into the database 
 @app.route('/upload_into_students_data',methods = ['GET','POST'])
 def upload_into_students_data(): 
@@ -60,10 +89,25 @@ def upload_into_students_data():
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER_1'],secure_filename(file.filename))) # Then save the file
         pymysql.install_as_MySQLdb()
         engine = create_engine('mysql://root:sudheer123@localhost/students_data')
-        df1 = pd.read_excel('students_data\sample_sheet.xlsx')
-        df1 = pd.read_excel("students_data\sample_sheet.xlsx",dtype = {"total_backlogs":NUMERIC})
+        df1 = pd.read_excel('students_data\students_sheet.xlsx')
+        df1 = pd.read_excel("students_data\students_sheet.xlsx",dtype = {"total_backlogs":Numeric,"tenth_cgpa":float,"tenth_percentage":float,"inter_cgpa":float,"inter_percentage":float,"diploma_percentage":float,"placement_status":String})
         df1.to_sql("sqldb1",con= engine,if_exists ="append")
-        return "File has been uploaded."
+
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        cur.execute("UPDATE sqldb1 SET gender='Male' WHERE gender=' Male';")
+        con.commit()
+
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        cur.execute("UPDATE sqldb1 SET gender='Female' WHERE gender=' Female';")
+        con.commit()
+
+        file = 'students_sheet.xlsx'  #( File name)
+        location = "students_data/"   # (File location)
+        path = os.path.join(location, file) # (Path)
+        os.remove(path)  # (Remove the file, 'sample_sheet.xlsx')
+        return "File has been uploaded and pushed into database and deleted."
     return render_template('upload_sheet1.html',form = form)
 
 # This route is for uploading the excel sheet of only those students data which has to be updated in the database 
@@ -76,9 +120,23 @@ def upload_into_updated_students_data():
         pymysql.install_as_MySQLdb()
         engine = create_engine('mysql://root:sudheer123@localhost/students_data')
         df1 = pd.read_excel('updated_students_data\sheet.xlsx')
-        #df1 = pd.read_excel("updated_students_data\sheet.xlsx",dtype = {"total_backlogs":Numeric})
+        df1 = pd.read_excel("updated_students_data\sheet.xlsx",dtype = {"total_backlogs":Numeric})
         df1.to_sql("sqldb2",con= engine,if_exists ="append")
-        return "File has been uploaded."
+    
+        file = 'sheet.xlsx'  #( File name)
+        location = "updated_students_data/"   # (File location)
+        path = os.path.join(location, file) # (Path)
+        os.remove(path)  # (Remove the file, 'sheet.xlsx')
+
+        '''This database call is necessary  but it should be performed after once the sqldb1 table is updated 
+           then we have to delete the table'''
+
+        '''con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        data = cur.execute("DROP TABLE sqldb2;")
+        data = cur.fetchall()
+        cur.close()'''
+        return "File has been uploaded into the table and automatically deleted."
     return render_template('upload_sheet2.html',form = form)
 
 # This 
@@ -136,13 +194,187 @@ def test2():
         con.commit()
     return render_template('output_test_2.html',students1 = li1, d_backlogs_1 = d_backlogs_1, d_backlogs_2 = d_backlogs_2, d_btech_per_1 = d_btech_per_1, d_btech_per_2 = d_btech_per_2, students2 = li2)
 
-@app.route('/student_table')
+@app.route('/student_table',methods=['GET','POST'])
 def student_table():
-    con = pymysql.connect()
-    cur = con.cursor(pymysql.cursors.DictCursor)
-    data = cur.execute("SELECT * FROM sqldb1;")
-    return render_template('output_test_3.html')
+    if request.method == 'GET':
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        data = cur.execute("SELECT * FROM sqldb1;")
+        data = cur.fetchall()
+        con.close()
+        return render_template('output_test_3.html',data = data)
+    elif request.method == 'POST':
+        f = request.form['Rounds']
+        s1 = request.form.getlist('mycheckbox') 
 
+        for i in s1:
+            con = mysql.connect()
+            cur = con.cursor(pymysql.cursors.DictCursor)
+            data = cur.execute("SELECT * FROM sqldb1 WHERE roll_no = '{}';".format(i))
+            data = cur.fetchall()
+            con.close()
+
+        '''s2 = []
+        for i in s1:
+            s2.append(int(i))'''
+            
+
+        return render_template('filter.html',filter = f,s=s1,data = data)
+
+@app.route('/display_company_filters_form')
+def display_company_filters_form():
+    return render_template("company_filters_form.html")
+
+@app.route('/company_logs',methods=['GET','POST'])
+def company_logs():
+    if request.method == 'GET':
+        return "Hello"
+    elif request.method == 'POST':
+        c = request.form['company']
+
+        c_em = request.form['company_mail']
+        c_yr = request.form['passout_year']
+        c_btech_yr = request.form['btech_year']
+        branches = request.form.getlist('branch_selection') 
+        c_per_b = request.form['criteria_btech']
+        c_per_i = request.form['criteria_inter']
+        c_per_t = request.form['criteria_tenth']
+        c_b = request.form['backlog-selection']
+        c_gen = request.form['gender']
+
+        t_name = c + '_' + c_yr + '_' + c_btech_yr 
+
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        tables_data = cur.execute("SHOW TABLES;")
+        tables_data = cur.fetchall()
+        cur.close()
+        con.commit()
+
+        table_names = []
+        for table in tables_data:
+            table_names.append(table['Tables_in_students_data'])
+        
+        t_name = t_name.lower()
+        
+        count = 0
+        for i in table_names:
+            if(t_name == i):
+                count = count + 1
+        
+        if(count == 0):
+            con = mysql.connect()
+            cur = con.cursor(pymysql.cursors.DictCursor)
+            data = cur.execute("CREATE TABLE {}(roll_no VARCHAR(250),email VARCHAR(250),rounds VARCHAR(250),PRIMARY KEY(roll_no));".format(t_name))
+            data = cur.fetchall()
+            cur.close()
+            con.commit()
+
+            con = mysql.connect()
+            cur = con.cursor(pymysql.cursors.DictCursor)
+            if(c_gen == 'Male' or c_gen == 'Female'):
+                data = cur.execute("INSERT INTO {}(roll_no, email) SELECT roll_no,emails FROM sqldb1 WHERE btech_percentage >= {} AND inter_percentage >= {} AND tenth_percentage >= {} AND total_backlogs >= {} AND gender = '{}';".format(t_name,c_per_b,c_per_i,c_per_t,c_b,c_gen))
+            else:
+                data = cur.execute("INSERT INTO {}(roll_no, email) SELECT roll_no,emails FROM sqldb1 WHERE btech_percentage >= {} AND inter_percentage >= {} AND tenth_percentage >= {} AND total_backlogs >= {};".format(t_name,c_per_b,c_per_i,c_per_t,c_b))
+            data = cur.fetchall()
+            cur.close()
+            con.commit()
+
+            return render_template('list_of_companies.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
+        else:
+            
+            con = mysql.connect()
+            cur = con.cursor(pymysql.cursors.DictCursor)
+            data = cur.execute("SELECT roll_no FROM sqldb1 WHERE btech_percentage >= {} AND inter_percentage >= {} AND tenth_percentage >= {} AND total_backlogs >= {} AND gender = '{}';".format(c_per_b,c_per_i,c_per_t,c_b,c_gen))
+            data = cur.fetchall()
+            cur.close()
+            con.commit()
+
+            con = mysql.connect()
+            cur = con.cursor(pymysql.cursors.DictCursor)
+            data = cur.execute("INSERT INTO {}(roll_no, email) SELECT roll_no,emails FROM sqldb1 WHERE btech_percentage >= {} AND inter_percentage >= {} AND tenth_percentage >= {} AND total_backlogs >= {} AND gender = '{}';".format(t_name,c_per_b,c_per_i,c_per_t,c_b,c_gen))
+            data = cur.fetchall()
+            cur.close()
+            con.commit()
+
+
+            return render_template('list_of_companies.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
+
+
+        '''con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        data = cur.execute("SELECT * FROM sqldb1 WHERE btech_percentage >= {};".format(c_per_b))
+        data = cur.fetchall()
+        cur.close()
+        con.commit()
+
+
+        return render_template('list_of_companies.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data) 
+'''
+
+@app.route('/tables')
+def tables():
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    tables_data = cur.execute("SHOW TABLES;")
+    tables_data = cur.fetchall()
+    cur.close()
+    con.commit()
+
+    table_names = []
+    for table in tables_data:
+        table_names.append(table['Tables_in_students_data'])
+
+    return render_template('list_of_tables.html',table_names=table_names)
+
+
+
+@app.route('/show_company_table/<name>',methods=['GET','POST'])
+def show_company_table(name):
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    cur.execute('SELECT * FROM {};'.format(name))
+    data = cur.fetchall()
+    cur.close()
+    
+    return render_template('company_wise_details.html',data = data, name = name)
+
+@app.route('/update_rounds/<name>',methods=['GET','POST'])
+def update_rounds(name):
+    
+    if request.method == 'POST':
+        f = request.form['Rounds']
+        s1 = request.form.getlist('mycheckbox') 
+
+        for i in s1:
+            con = mysql.connect()
+            cur = con.cursor(pymysql.cursors.DictCursor)
+            data = cur.execute("UPDATE {} SET rounds = '{}' WHERE roll_no = '{}';".format(name,f,i))
+            data = cur.fetchall()
+            cur.close()
+            con.commit()
+
+        '''s2 = []
+        for i in s1:
+            s2.append(int(i))'''
+
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        cur.execute('SELECT * FROM {};'.format(name))
+        data = cur.fetchall()
+        cur.close()
+    
+        return render_template('company_wise_details.html',data = data, name = name)
+            
+@app.route('/delete_company_table/<name>')
+def delete_company_table(name):
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    data = cur.execute("DROP TABLE {};".format(name))
+    data = cur.fetchall()
+    cur.close()
+    return redirect(url_for('tables'))
+        
 
 if(__name__) == '__main__':
     app.run(port=2000,debug=True)
