@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft a mail</title>
+    <style>
+           @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+
+body {
+    font-family: 'open sans', sans-serif;
+    background: #2c3e50;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+}
+div{
+    margin-bottom: 1rem;
+}
+
+nav {
+    position: relative;
+    width: 100%;
+    background: #34495e;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
+}
+
+nav a {
+    display: flexbox;
+    margin: 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    line-height: 50px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+a:hover {
+    width: 100%;
+    padding: 15px;
+    background: #1abc9c;
+    border-radius: 8px;
+    transition: all .5s ease 0s;
+}
+
+h1 {
+    font-style: italic;
+    display: flex;
+    justify-content: center;
+    color: white;
+    animation: neon 3s infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes neon {
+
+    0%,
+    39%,
+    41%,
+    59%,
+    61%,
+    100% {
+        text-shadow: white 0 0 12px,
+            #04d29e 0 0 24px,
+            #00ffcc 0 0 36px;
+    }
+
+    40%,
+    60% {
+        text-shadow: none;
+    }
+}
+       .box{
+    margin-top: 1rem;
+    width: 50%;
+    border: 1px solid black;
+    background:none;
+    height:50%;
+    padding: 5%;
+    border: 3px solid;
+    border-radius: 10px;
+    backdrop-filter: blur(10px); 
+    border-image: linear-gradient(var(--angle), #00cc99, #eef0f5, #6600ff,#ef4444,#fef08a)1;
+    animation: 5s rotate linear infinite;
+    --angle: 0deg;
+}
+
+@keyframes rotate {
+    to {
+        --angle: 360deg;
+    }
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.message{
+    padding: 4rem;
+}
+
+input,textarea{
+    padding: 1rem;
+    width: 100%;
+    color: black;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+input::placeholder{
+    color: black;
+}
+button{
+            background-color: #00cc99;
+            color: white;
+            padding: 15px;
+            border-radius: 20px;
+            border-style: none;
+            cursor: pointer;
+            text-decoration: none;
+}
+    </style>
+</head>
+<body>
+    <center>
+        <nav>
+        <a href="/">Home</a>
+        <a href="{{url_for('display_eligibility_filters_form')}}">Filters</a>
+        <a href="{{url_for('upload_into_students_data')}}">Upload</a>
+        <!--<a href="{{url_for('test1')}}">Page for testing the data present in the database 1(test_1)</a>-->
+        <a href="{{url_for('upload_into_updated_students_data')}}">Update</a>
+        <!--<a href="{{url_for('test2')}}">Page for testing the data present in the database 2(test_2)</a>
+        After clicking this link the data in the sqldb1 should be updated with data in sql db2 and also sqldb2 should be dropped 
+        -->
+        <a href="{{url_for('display_company_filters_form')}}">Company-filter</a>
+        <a href="{{url_for('student_table')}}">Students-data</a>
+        <a href="{{url_for('company_tables')}}">Company-logs</a>
+        <a href="{{url_for('tables')}}">Tables</a>
+        <div class="animation start-home"></div>
+    </nav>
+        <h1>Mail-drafting</h1>
+        <div class="box">
+        <form action="{{url_for('send_mail')}}" method="POST" enctype="multipart/form-data">
+           <div><input type="text" name="company" placeholder="Company Name" value="{{name}}" required> </div>
+            <textarea name="message" id="" cols="30" rows="10"></textarea>
+            <!--<input type="text" class="message" name="message" placeholder="Message" required>-->
+            <div>
+            {{form.hidden_tag()}}
+            </div>
+            <div>
+            {{form.file()}}
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        </div>
+    </center>
+    
+    
+</body>
+</html>

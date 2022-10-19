@@ -25,13 +25,17 @@ from flaskext.mysql import MySQL
 import pymysql
 from sqlalchemy  import Float, Numeric, String, create_engine
 import sqlalchemy
+import mysql.connector as c
+
 
 
 app = Flask(__name__)
 app.secret_key = "Sudheer"
+app.config['UPLOAD_FOLDER'] = "attachments"
 app.config['UPLOAD_FOLDER_1'] = "students_data"
 app.config['UPLOAD_FOLDER_2'] = "updated_students_data"
 
+# Connection 1
 mysql = MySQL()
 # MySQL Configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
@@ -40,7 +44,18 @@ app.config['MYSQL_DATABASE_DB'] = 'students_data'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
-# This class is for creating the flask forms 
+con1 = c.connect(host = "localhost",user = "root",password = "sudheer123",database = "students_data")
+
+
+
+
+# This class is for creating the flask forms (attachment upload)
+class Upload_attachment(FlaskForm):
+    file = FileField("File", validators=[InputRequired()])
+    submit = SubmitField("Upload File")
+
+
+# This class is for creating the flask forms (excel sheet upload)
 class Upload_excel_file(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
     submit = SubmitField("Upload File")
@@ -128,16 +143,13 @@ def upload_into_updated_students_data():
         path = os.path.join(location, file) # (Path)
         os.remove(path)  # (Remove the file, 'sheet.xlsx')
 
-        '''This database call is necessary  but it should be performed after once the sqldb1 table is updated 
-           then we have to delete the table'''
+        return "Plzz go back and click on update"
 
-        '''con = mysql.connect()
-        cur = con.cursor(pymysql.cursors.DictCursor)
-        data = cur.execute("DROP TABLE sqldb2;")
-        data = cur.fetchall()
-        cur.close()'''
-        return "File has been uploaded into the table and automatically deleted."
-    return render_template('upload_sheet2.html',form = form)
+        
+
+        
+        
+    return render_template('upload_sheet2.html',form=form)
 
 # This 
 @app.route('/test1')
@@ -192,7 +204,17 @@ def test2():
         cur = con.cursor(pymysql.cursors.DictCursor)
         data2 = cur.execute("UPDATE sqldb1 SET total_backlogs = '{}', btech_percentage = '{}' where roll_no = '{}';".format(d_backlogs_1[i], d_btech_per_1[i], i))
         con.commit()
-    return render_template('output_test_2.html',students1 = li1, d_backlogs_1 = d_backlogs_1, d_backlogs_2 = d_backlogs_2, d_btech_per_1 = d_btech_per_1, d_btech_per_2 = d_btech_per_2, students2 = li2)
+
+    '''This database call is necessary  but it should be performed after once the sqldb1 table is updated 
+           then we have to delete the table'''
+
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    data = cur.execute("DROP TABLE sqldb2;")
+    data = cur.fetchall()
+    cur.close()
+    return redirect(url_for('upload_into_updated_students_data'))
+    #return render_template('upload_sheet2.html',students1 = li1, d_backlogs_1 = d_backlogs_1, d_backlogs_2 = d_backlogs_2, d_btech_per_1 = d_btech_per_1, d_btech_per_2 = d_btech_per_2, students2 = li2)
 
 @app.route('/student_table',methods=['GET','POST'])
 def student_table():
@@ -203,7 +225,8 @@ def student_table():
         data = cur.fetchall()
         con.close()
         return render_template('output_test_3.html',data = data)
-    elif request.method == 'POST':
+        # I feel this code aint required so just commenting for now
+    '''elif request.method == 'POST':
         f = request.form['Rounds']
         s1 = request.form.getlist('mycheckbox') 
 
@@ -214,12 +237,12 @@ def student_table():
             data = cur.fetchall()
             con.close()
 
-        '''s2 = []
+        s2 = []
         for i in s1:
-            s2.append(int(i))'''
+            s2.append(int(i))
             
 
-        return render_template('filter.html',filter = f,s=s1,data = data)
+        return render_template('filter.html',filter = f,s=s1,data = data)'''
 
 @app.route('/display_company_filters_form')
 def display_company_filters_form():
@@ -280,7 +303,7 @@ def company_logs():
             cur.close()
             con.commit()
 
-            return render_template('list_of_companies.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
+            return render_template('list_of_company_tables.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
         else:
             
             con = mysql.connect()
@@ -298,7 +321,7 @@ def company_logs():
             con.commit()
 
 
-            return render_template('list_of_companies.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
+            return render_template('list_of_company_tables.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
 
 
         '''con = mysql.connect()
@@ -312,6 +335,27 @@ def company_logs():
         return render_template('list_of_companies.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data) 
 '''
 
+@app.route('/company_tables')
+def company_tables():
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    tables_data = cur.execute("SHOW TABLES;")
+    tables_data = cur.fetchall()
+    cur.close()
+    con.commit()
+
+    company_table_names = []
+    primary_tables = []
+    for table in tables_data:
+        if(table['Tables_in_students_data'] != 'sqldb1') and  (table['Tables_in_students_data'] != 'sqldb2') and (table['Tables_in_students_data'] != 'companies'):
+            company_table_names.append(table['Tables_in_students_data'])
+        else:
+            primary_tables.append(table['Tables_in_students_data'])
+
+    print(company_table_names)
+    print(primary_tables)
+    return render_template('list_of_company_tables.html',table_names=company_table_names)
+
 @app.route('/tables')
 def tables():
     con = mysql.connect()
@@ -321,11 +365,17 @@ def tables():
     cur.close()
     con.commit()
 
-    table_names = []
+    company_table_names = []
+    primary_tables = []
     for table in tables_data:
-        table_names.append(table['Tables_in_students_data'])
+        if(table['Tables_in_students_data'] != 'sqldb1') and  (table['Tables_in_students_data'] != 'sqldb2') and (table['Tables_in_students_data'] != 'companies'):
+            company_table_names.append(table['Tables_in_students_data'])
+        else:
+            primary_tables.append(table['Tables_in_students_data'])
 
-    return render_template('list_of_tables.html',table_names=table_names)
+    print(company_table_names)
+    print(primary_tables)
+    return render_template('list_of_company_tables.html',table_names=primary_tables)
 
 
 
@@ -338,6 +388,15 @@ def show_company_table(name):
     cur.close()
     
     return render_template('company_wise_details.html',data = data, name = name)
+
+@app.route('/delete_company_table/<name>')
+def delete_company_table(name):
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    data = cur.execute("DROP TABLE {};".format(name))
+    data = cur.fetchall()
+    cur.close()
+    return redirect(url_for('tables'))
 
 @app.route('/update_rounds/<name>',methods=['GET','POST'])
 def update_rounds(name):
@@ -365,15 +424,101 @@ def update_rounds(name):
         cur.close()
     
         return render_template('company_wise_details.html',data = data, name = name)
+
+
+@app.route('/send_company_mails/<name>',methods = ['GET','POST'])
+def send_company_mails(name):
+    form = Upload_attachment()
+    return render_template('draft_mail.html',form = form,name = name)
+
+@app.route('/send_mail',methods=['GET','POST'])
+def send_mail():
+    if request.method == 'POST':
+        form = Upload_attachment()
+        if form.validate_on_submit():
+            file = form.file.data # First grab the file
+            file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
             
-@app.route('/delete_company_table/<name>')
-def delete_company_table(name):
+        c = request.form['company']
+        sam_msg = request.form['message']
+        # procedure 1
+        '''con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        cur.execute('SELECT email FROM {};'.format(c))
+        data = cur.fetchall()
+        cur.close()
+         
+        email_li = []
+        for i in data:
+            s = i['email']
+            
+            if('\xa0' in s):
+                s = s.replace(u'\xa0', u' ')
+                email_li.append(i[1:])
+            else:
+                email_li.append(i) 
+            email_li.append(s)'''
+
+        # procedure 2
+        cursor = con1.cursor()
+        cursor.execute('select email from {};'.format(c))
+        data_mailList = cursor.fetchall()
+        con1.commit()
+        cursor.close()
+
+        email_li = []
+        for i in data_mailList:
+            s = i[0]
+            s = str(s)
+            if('.com' in s):
+                if('\xa0' in s):
+                    s = s.replace(u'\xa0', u' ')
+                    email_li.append(s[1:])
+                else:
+                    email_li.append(s) 
+        
+        
+        
+        email_id = "lolday606@gmail.com"
+        email_pass = "ztskhwqzmvanmjqn"
+        path = "C:/Sudheer/flask_placements/attachments/"
+
+        msg = EmailMessage()
+        msg['subject'] = "Testing mail feature with smtplib"
+        msg['From'] = email_id
+        msg['To'] = email_li
+        msg.set_content(sam_msg)
+
+        for each_file in os.listdir(path):
+            print(each_file)
+            if(each_file == c):
+                
+                with open(each_file, 'rb') as f:
+                    file_data = f.read()
+                    file_name = f.name
+                    
+                    msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+
+        with smtplib.SMTP_SSL("smtp.gmail.com",465) as smtp:
+            smtp.login(email_id,email_pass)
+            smtp.send_message(msg)
+        
+        
+        
+        
+        return render_template("mail_output.html",mails = email_li,form = form, name = c)
+    
+    
+
+
+'''@app.route('/send_company_mails/<name>')
+def send_company_mails(name):
     con = mysql.connect()
     cur = con.cursor(pymysql.cursors.DictCursor)
-    data = cur.execute("DROP TABLE {};".format(name))
+    data = cur.execute("SELECT email FROM {};".format(name))
     data = cur.fetchall()
     cur.close()
-    return redirect(url_for('tables'))
+    return render_template('draft_mail.html',data=data)'''
         
 
 if(__name__) == '__main__':

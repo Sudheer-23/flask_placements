@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NSRIT</title>
+    <title>Eligible students</title>
     <style>
-              @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+       @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 
 body {
     font-family: 'open sans', sans-serif;
@@ -44,22 +44,6 @@ a:hover {
   transition: all .5s ease 0s;
 }
 
-select{
-            font-size: 1rem;
-            font-family: monaco;
-            color:white;
-            padding: 15px;
-            width: 25%;
-            border: 2px solid white;
-            border-radius: 5px;
-            margin:3%;
-            background:none;
-        }
-
-option{
-    color: #000;
-}
-
 table {
     margin: 1rem;
     display: flex;
@@ -72,61 +56,64 @@ table {
 }
 
 tr {
-    width: 100%;
     transition: all .2s ease-in;
     cursor: pointer;
-}
-
-th,td {
-    width: 100%;
-    padding: 19px;
-    color: white;
-    text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-#header {
-    width: 100%;
-    background-color: #16a085;
+td {
+    padding: 19px;
+    color: white;
+    text-align: left;
+    border: 2px solid #000;
+    border-bottom: 1px solid #ddd;
+}
+th{
+    padding: 19px;
     color: #fff;
+    background-color: #16a085;
+    border-bottom: 1px solid #ddd;
 }
 
-h1 {
-    font-weight: 600;
-    text-align: center;
-    background-color: #16a085;
-    color: #fff;
-    padding: 10px 0px;
+h1{
+    font-style: italic;
+    display: flex;
+    justify-content: center;
+    color: white;
+    animation: neon 3s infinite;
 }
+
+@keyframes neon{
+    0%,39%,41%,59%,61%,100%{
+        text-shadow: white 0 0 12px,
+        #04d29e 0 0 24px,
+        #00ffcc 0 0 36px;
+    }
+
+    40%,60%{
+        text-shadow: none;
+    }
+}
+
 
 tr:hover {
     background-color: #000;
     transform: scale(1.02);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
 }
-
 button{
-    font-size: 1rem;
-            font-family: monaco;
-            color:white;
+            background-color: #00cc99;
+            color: white;
             padding: 15px;
-            border: 2px solid white;
-            border-radius: 5px;
-            margin:3%;
-            background:none;
-
-        }
-
-        button:hover{
-            background-color: rgb(92, 220, 255);
-            border: 2px solid  rgb(92, 220, 255);
-        }
-
-        button:active{
-            background-color: rgb(92, 255, 116);
-            border: 2px solid rgb(92, 255, 116);
-        }
-
+            border-radius: 20px;
+            border-style: none;
+            cursor: pointer;
+            text-decoration: none;
+}
+.test{
+    color: white;
+    text-decoration: none;
+}
 
 input[type="button"] {
     transition: all .3s;
@@ -151,6 +138,7 @@ input[type="button"] {
     background-color: #ddd;
   }
     </style>
+
 </head>
 <body>
     <center>
@@ -169,50 +157,35 @@ input[type="button"] {
         <a href="{{url_for('tables')}}">Tables</a>
         <div class="animation start-home"></div>
     </nav>
-<div> 
-    <form action="/update_rounds/{{name}}" method="POST">
-        {{filter}}
 
-        <select name="Rounds" id="filter" required>
-            <option value="">Rounds Filter</option>
-            <option value="Round_1">Round 1</option>
-            <option value="Round_2">Round 2</option>
-            <option value="Round_3">Round 3</option>
-            <option value="Round_4">Round 4</option>
-            <option value="Round_5">Round 5</option>
-            <option value="Round_6">Round 6</option>
-            <option value="Round_7">Round 7</option>
-        </select>
+    <h1>Companies visited</h1>
+    <div>
+<table class="content-table" id="myTable">
+        <tr>
+        <th>company name</th>
+        <th>Details</th>
+        <th>Mails</th>
+        </tr>
 
-        <button type="submit">SUBMIT</button>
+    {% for table in table_names %}
+    <tr>
+        <td>{{table}}</td>
+        <td>
+           <button><a href="/show_company_table/{{table}}" class="test">Show Details</a></button>  
+        </td>
+        
+        <td>
+           <button><a href="/send_company_mails/{{table}}" class="test">SEND MAILS</a></button> 
+        </td>
+    </tr>
+    {% endfor %}
 
-          <div>
-            <table class="content-table" id="myTable">
-                    <tr id="header">
-                        <th>student_roll_no</th>
-                        <th>student_email</th>
-                        <th>Rounds</th>
-                        <th>checkbox</th>
-                    </tr>
-                    {% for student in data %}
-                    <tr>
-                        <td>{{student.roll_no}}</td>
-                        <td>{{student.email}}</td>
-                        <td>{{student.rounds}}</td>
-                        
-                        <td width="70">
-                            <input type="checkbox" name="mycheckbox" id="" value="{{student.roll_no}}" >
-                        </td>
-                    </tr>
-                    {% endfor %}
-            </table>
-        </div>
-    </form>
+</table>
 </div>
 </center>
-    <script>
-        var $table = document.getElementById("myTable"),
-        $n = 10,
+<script>
+     var $table = document.getElementById("myTable"),
+        $n = 2,
         $rowCount = $table.rows.length,
         $firstRow = $table.rows[0].firstElementChild.tagName,
         $hasHead = ($firstRow === "TH"),
@@ -246,14 +219,6 @@ input[type="button"] {
           $buttons += "<input type='button' value='Next >>' onclick='sort("+($cur + 1)+")' "+$nextDis+">";
           return $buttons;
         }
-    </script>
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-

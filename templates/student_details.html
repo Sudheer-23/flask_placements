@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSRIT</title>
+    <style>
+       
+
+        
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+    
+        body {
+            font-family: 'open sans', sans-serif;
+            background: #2c3e50;
+        }
+    
+        nav {
+            position: relative;
+            width: 100%;
+            background: #34495e;
+            border-radius: 8px;
+            font-size: 0;
+            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
+        }
+    
+        nav a {
+            font-size: 15px;
+            text-transform: uppercase;
+            color: white;
+            text-decoration: none;
+            line-height: 50px;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            text-align: center;
+        }
+    
+        nav .animation {
+            position: absolute;
+            height: 100%;
+            top: 0;
+            z-index: 0;
+            background: #1abc9c;
+            border-radius: 8px;
+            transition: all .5s ease 0s;
+        }
+    
+        nav a:nth-child(1) {
+            width: 100px;
+        }
+    
+        nav .start-home,
+        a:nth-child(1):hover~.animation {
+            width: 100px;
+            left: 0;
+    
+        }
+    
+        nav a:nth-child(2) {
+            width: 110px;
+    
+        }
+    
+        nav a:nth-child(2):hover~.animation {
+            width: 110px;
+            left: 100px;
+        }
+    
+        nav a:nth-child(3) {
+            width: 160px;
+        }
+    
+        nav a:nth-child(3):hover~.animation {
+            left: 210px;
+            width: 160px;
+        }
+    
+        nav a:nth-child(4) {
+            width: 160px;
+        }
+    
+        nav a:nth-child(4):hover~.animation {
+            width: 160px;
+            left: 370px;
+        }
+    
+        nav a:nth-child(5) {
+            width: 160px;
+        }
+    
+        nav a:nth-child(5):hover~.animation {
+            width: 160px;
+            left: 530px;
+        }
+        nav a:nth-child(6) {
+            width: 100px;
+        }
+    
+        nav a:nth-child(6):hover~.animation {
+            width: 100px;
+            left: 690px;
+        }
+    
+        nav a:nth-child(7) {
+            width: 100px;
+        }
+    
+        nav a:nth-child(7):hover~.animation {
+            width: 100px;
+            left: 790px;
+        }
+        
+        table {
+            margin-top: 3rem;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-collapse: collapse;
+            width: 800px;
+            height: 200px;
+            border: 1px solid #bdc3c7;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        tr {
+            transition: all .2s ease-in;
+            cursor: pointer;
+        }
+        
+        th,
+        td {
+            padding: 12px;
+            color: white;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        #header {
+            background-color: #16a085;
+            color: #fff;
+        }
+        
+        h1 {
+            font-weight: 600;
+            text-align: center;
+            background-color: #16a085;
+            color: #fff;
+            padding: 10px 0px;
+        }
+        
+        tr:hover {
+            background-color: #000;
+            transform: scale(1.02);
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+       
+        input[type="button"] {
+            transition: all .3s;
+              border: 1px solid #ddd;
+              padding: 8px 16px;
+              text-decoration: none;
+              border-radius: 5px;
+              color: white;
+            font-size: 15px;
+          }
+          
+          input[type="button"]:not(.active) {
+            background-color:transparent;
+          }
+          
+          .active {
+            background-color: #1abc9c;
+            color :#fff;
+          }
+          
+          input[type="button"]:hover:not(.active) {
+            background-color: #ddd;
+          }
+    </style>
+    </style>
+</head>
+<body>
+
+
+    <nav>
+        <a class="navbar-brand" href="/"> Students Data </a>
+    </nav>
+
+    <br>
+    <br>
+    
+    
+    
+    <div class="row"> 
+    
+    <form action="/update_rounds/{{name}}" method="POST">
+        {{filter}}
+
+        <select name="Rounds" id="filter" required>
+            <option value="">Rounds Filter</option>
+            <option value="Round_1">Round 1</option>
+            <option value="Round_2">Round 2</option>
+            <option value="Round_3">Round 3</option>
+            <option value="Round_4">Round 4</option>
+            <option value="Round_5">Round 5</option>
+            <option value="Round_6">Round 6</option>
+            <option value="Round_7">Round 7</option>
+            <option value="Selected">Selected</option>
+           
+        </select>
+
+          <br>
+          <br>
+          <br>
+    
+        <div class="col-md-10">
+            <table class="content-table" id="myTable">
+                
+                    <tr id="header">
+                        
+                        <th>student_roll_no</th>
+                        <th>student_email</th>
+                        <th>Rounds</th>
+                        
+                    </tr>
+                
+                <tbody>
+                    {% for student in data %}
+                    <tr>
+                        <td>{{student.roll_no}}</td>
+                        <td>{{student.email}}</td>
+                        <td>{{student.rounds}}</td>
+                        
+                        <td width="70">
+                            <input type="checkbox" name="mycheckbox" id="" value="{{student.roll_no}}" >
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    
+        </div>
+        <br>
+        <br>
+        <button type="submit">SUBMIT</button>
+    </form>
+    </div>
+
+    
+</body>
+</html>
+
+
+
+
+
+
+
+

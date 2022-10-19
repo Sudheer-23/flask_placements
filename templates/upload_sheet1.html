@@ -6,8 +6,10 @@
 -->
 
 
-
-
+<!--
+    This HTML Page is for displaying the form for submiting the filter criteria for displaying the eligible
+    students data.
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,56 +19,182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NSRIT</title>
     <style>
-        div{
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            margin-bottom: 1rem;
-            gap: 10px;
+          @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 
-        }
+body {
+    font-family: 'open sans', sans-serif;
+    background: #2c3e50;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+}
 
-        .upload{
-            padding-top: 10rem;
-        }
+nav {
+    position: relative;
+    width: 100%;
+    background: #34495e;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
+}
 
-        select{
-            padding: 1rem;
-            border-radius: 10px;
-            border-color: blue;
-        }
-        input{
-            padding: 1rem;
-            border: 1px solid;
-        }
+nav a {
+    display: flexbox;
+    margin: 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    line-height: 50px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
 
-        button{
-            background-color: blue;
+a:hover {
+    width: 100%;
+    padding: 15px;
+    background: #1abc9c;
+    border-radius: 8px;
+    transition: all .5s ease 0s;
+}
+.box {
+    backdrop-filter: blur(10px);
+    margin-top: 4rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    --angle: 0deg;
+    width: 50%;
+    height: 50%;
+    border: 5px solid;
+    border-image: linear-gradient(var(--angle), #00cc99, #eef0f5, #6600ff,#ef4444,#fef08a)1;
+    animation: 5s rotate linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        --angle: 360deg;
+    }
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+div{
+    display: flexbox;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 1rem;
+    gap: 10px;
+
+}
+
+
+
+h1{
+    font-style: italic;
+    display: flex;
+    justify-content: center;
+    color: white;
+    animation: neon 3s infinite;
+}
+
+@keyframes neon{
+    0%,39%,41%,59%,61%,100%{
+        text-shadow: white 0 0 12px,
+        #04d29e 0 0 24px,
+        #00ffcc 0 0 36px;
+    }
+
+    40%,60%{
+        text-shadow: none;
+    }
+}
+
+
+
+
+
+select{
+    padding: 1rem;
+    border-radius: 10px;
+    border-color: blue;
+}
+input{
+    padding: 1rem;
+    border: 1px solid;
+    color: white;
+}
+input[type="submit" i] {
+    background-color: #00cc99;
             color: white;
-            padding: 10px;
+            padding: 15px;
             border-radius: 20px;
             border-style: none;
             cursor: pointer;
         }
+
     </style>
 </head>
 <body>
     <center>
-        <h2>Web Page for uploading the excel sheet of students data and then push into database </h2>
+        <nav>
+        <a href="/">Home</a>
+        <a href="{{url_for('display_eligibility_filters_form')}}">Filters</a>
+        <a href="{{url_for('upload_into_students_data')}}">Upload</a>
+        <!--<a href="{{url_for('test1')}}">Page for testing the data present in the database 1(test_1)</a>-->
+        <a href="{{url_for('upload_into_updated_students_data')}}">Update</a>
+        <!--<a href="{{url_for('test2')}}">Page for testing the data present in the database 2(test_2)</a>
+        After clicking this link the data in the sqldb1 should be updated with data in sql db2 and also sqldb2 should be dropped 
+        -->
+        <a href="{{url_for('display_company_filters_form')}}">Company-filter</a>
+        <a href="{{url_for('student_table')}}">Students-data</a>
+        <a href="{{url_for('company_tables')}}">Company-logs</a>
+        <a href="{{url_for('tables')}}">Tables</a>
+        <div class="animation start-home"></div>
+    </nav>
+        <h1>Upload Student Data</h1>
+
         <form action="{{url_for('upload_into_students_data')}}" method="POST" enctype="multipart/form-data">
             {{form.hidden_tag()}}
-            <div class="upload">
 
-                <select name="year" id="year">
-                <option value="">passout year</option>
+            <div class="box">
+        <div class="content">
+            <select name="year" id="year">
+                <option value="">Passout Year</option>
+                <option value="zero">2000</option>
+                <option value="one">2001</option>
+                <option value="two">2002</option>
+                <option value="three">2003</option>
+                <option value="four">2004</option>
+                <option value="five">2005</option>
+                <option value="six">2006</option>
+                <option value="seven">2007</option>
+                <option value="eight">2008</option>
+                <option value="nine">2009</option>
+                <option value="ten">2010</option>
+                <option value="eleven">2011</option>
+                <option value="twelve">2012</option>
+                <option value="thirteen">2013</option>
+                <option value="fourteen">2014</option>
+                <option value="fifteen">2015</option>
+                <option value="sixteen">2016</option>
+                <option value="seventeen">2017</option>
+                <option value="eighteen">2018</option>
+                <option value="ninteen">2019</option>
                 <option value="twenty">2020</option>
                 <option value="twenty-one">2021</option>
                 <option value="twenty-two">2022</option>
                 <option value="twenty-three">2023</option>
+        
+        
                 </select>
                     
                 <select name="year" id="year">
-                <option value="">Btech year</option>
+                <option value="">BTech Year</option>
                 <option value="one">1</option>
                 <option value="two">2</option>
                 <option value="three">3</option>
@@ -82,12 +210,14 @@
                 <option value="civil">CIVIL</option>
                 </select>
                 </div>
-                <div>
-                    {{form.file()}}
-                </div>
-                <div>
-                    {{form.submit()}}
-                </div>
+
+            <div>
+                {{form.file()}}
+            </div>
+
+            <div>
+                {{form.submit()}}
+            </div>
                 
         </form>
 

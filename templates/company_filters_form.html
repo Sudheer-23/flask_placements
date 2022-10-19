@@ -12,303 +12,270 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOME PAGE</title>
-  <!-- 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 
-        body {
-            font-family: 'open sans', sans-serif;
-            background: #2c3e50;
-            background-image: url('https://cdn.mos.cms.futurecdn.net/qXsVayNBGNZejBMQeYNiHa.jpg');
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
+body {
+    font-family: 'open sans', sans-serif;
+    background: #2c3e50;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+}
 
-        nav {
-            position: relative;
-            width: 100%;
-            background: #34495e;
-            border-radius: 8px;
-            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
-        }
+nav {
+    position: relative;
+    width: 100%;
+    background: #34495e;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
+}
 
-        nav a {
-            font-size: 15px;
-            text-transform: uppercase;
+nav a {
+    display: flexbox;
+    margin: 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    line-height: 50px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+a:hover {
+    width: 100%;
+    padding: 15px;
+    background: #1abc9c;
+    border-radius: 8px;
+    transition: all .5s ease 0s;
+}
+
+h1 {
+    font-style: italic;
+    display: flex;
+    justify-content: center;
+    color: white;
+    animation: neon 3s infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes neon {
+
+    0%,
+    39%,
+    41%,
+    59%,
+    61%,
+    100% {
+        text-shadow: white 0 0 12px,
+            #04d29e 0 0 24px,
+            #00ffcc 0 0 36px;
+    }
+
+    40%,
+    60% {
+        text-shadow: none;
+    }
+}
+
+div{
+    margin: 10px;
+    gap: 20px;
+}
+form{
+    justify-content: center;
+    display: flex;
+    text-align: center;
+}
+
+.box{
+    margin-top: 1rem;
+    width: 50%;
+    border: 1px solid black;
+    background:none;
+    height:50%;
+    padding: 5%;
+    border: 3px solid;
+    border-radius: 10px;
+    backdrop-filter: blur(10px); 
+    border-image: linear-gradient(var(--angle), #00cc99, #eef0f5, #6600ff,#ef4444,#fef08a)1;
+    animation: 5s rotate linear infinite;
+    --angle: 0deg;
+}
+
+@keyframes rotate {
+    to {
+        --angle: 360deg;
+    }
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+input{
+    padding: 15px;
+    color: black;
+    border-radius: 10px;
+
+}
+
+input::placeholder{
+    color: black;
+}
+
+select{
+    padding: 15px;
+    border-radius: 10px;
+    color: black;
+}
+
+label{
+    color: white;
+}
+
+button{
+    background-color: #00cc99;
             color: white;
-            text-decoration: none;
-            line-height: 50px;
-            position: relative;
-            z-index: 1;
-            display: inline-block;
-            text-align: center;
-        }
-
-        nav .animation {
-            position: absolute;
-            height: 100%;
-            top: 0;
-            z-index: 0;
-            background: #1abc9c;
-            border-radius: 8px;
-            transition: all .5s ease 0s;
-        }
-
-        nav a:nth-child(1) {
-            width: 100px;
-        }
-
-        nav .start-home,
-        a:nth-child(1):hover~.animation {
-            width: 100px;
-            left: 0;
-
-        }
-
-        nav a:nth-child(2) {
-            width: 110px;
-
-        }
-
-        nav a:nth-child(2):hover~.animation {
-            width: 110px;
-            left: 100px;
-        }
-
-        nav a:nth-child(3) {
-            width: 160px;
-        }
-
-        nav a:nth-child(3):hover~.animation {
-            left: 210px;
-            width: 160px;
-        }
-
-        nav a:nth-child(4) {
-            width: 160px;
-        }
-
-        nav a:nth-child(4):hover~.animation {
-            width: 160px;
-            left: 370px;
-        }
-
-        nav a:nth-child(5) {
-            width: 160px;
-        }
-
-        nav a:nth-child(5):hover~.animation {
-            width: 160px;
-            left: 530px;
-        }
-        nav a:nth-child(6) {
-            width: 100px;
-        }
-
-        nav a:nth-child(6):hover~.animation {
-            width: 100px;
-            left: 690px;
-        }
-
-        nav a:nth-child(7) {
-            width: 100px;
-        }
-
-        nav a:nth-child(7):hover~.animation {
-            width: 100px;
-            left: 810px;
-        }
-
-
-        form{
-            justify-content: center;
-            display: flex;
-            text-align: center;
-        }
-        
-        .box{
-            margin-top: 1rem;
-            width: 50%;
-            border: 1px solid black;
-            background:none;
-            height:50%;
-            padding: 5%;
-            border-radius: 10px;
-            backdrop-filter: blur(10px); 
-        }
-        
-        select,input{
-            font-size: 1rem;
-            font-family: monaco;
-            color:white;
             padding: 15px;
-            width: 25%;
-            border: 2px solid white;
-            border-radius: 5px;
-            margin:3%;
-            background:none;
-        }
-        
-        input{
-            width: 90%;
-            
-        }
-        
-        option{
-            color: black;
-            padding: 1rem;
-        
-        }
-        
-        button{
-            padding: 5px;
-            margin-top: 1%;
-            background: none;
-            border: 2px solid white;
-            color: white;
-            border-radius: 5px;
-        
-        }
-        
-        button:hover{
-            background-color: rgb(92, 220, 255);
-            border: 2px solid  rgb(92, 220, 255);
-        }
-        
-        button:active{
-            background-color: rgb(92, 255, 116);
-            border: 2px solid rgb(92, 255, 116);
-        }
-        
-        
-        #flex{
-            margin-left:30% ;
-            display: flex;
-            flex-direction: row;
-        }
-    </style>-->
+            border-radius: 20px;
+            border-style: none;
+            cursor: pointer;
+}
+button:hover{
+    background: #00ffcc;
+    color: black;
+}
+    </style>
 
 </head>
+
 <body>
+    <center>
     <nav>
-        <a href="#">Home</a>
-        <a href="#">Files</a>
-        <a href="#">upload-sheet</a>
-        <a href="#">show-logs</a>
-        <a href="#">students-data</a>
-        <a href="#">Login</a>
-        <a href="#">Register</a>
+        <a href="/">Home</a>
+        <a href="{{url_for('display_eligibility_filters_form')}}">Filters</a>
+        <a href="{{url_for('upload_into_students_data')}}">Upload</a>
+        <!--<a href="{{url_for('test1')}}">Page for testing the data present in the database 1(test_1)</a>-->
+        <a href="{{url_for('upload_into_updated_students_data')}}">Update</a>
+        <!--<a href="{{url_for('test2')}}">Page for testing the data present in the database 2(test_2)</a>
+        After clicking this link the data in the sqldb1 should be updated with data in sql db2 and also sqldb2 should be dropped 
+        -->
+        <a href="{{url_for('display_company_filters_form')}}">Company-filter</a>
+        <a href="{{url_for('student_table')}}">Students-data</a>
+        <a href="{{url_for('company_tables')}}">Company-logs</a>
+        <a href="{{url_for('tables')}}">Tables</a>
         <div class="animation start-home"></div>
     </nav>
+    </center>
 
-    <h1>FORM FOR COMPANY FILTERS</h1>
-    <br>
-    <br>
+    <h1>Company Specific Eligibility Criteria</h1>
 
     <form action="{{url_for('company_logs')}}" method="POST">
-      
-        <div class = box>
-          <input type="text" name="company" placeholder="COMPANY NAME" required>
-        
-          <input type="email" name="company_mail" placeholder="COMPANY MAIL ID" required>
-        <br>
-        <br>
+        <div class="box">
+        <div>
+            <input type="text" name="company" placeholder="COMPANY NAME" required>
+            <input type="email" name="company_mail" placeholder="COMPANY MAIL ID" required>
+        </div>
+        <div>
             <select name="passout_year" id="year">
-            <option value="">passout year</option>
-            <option value=2020>2020</option>
-            <option value=2021>2021</option>
-            <option value=2022>2022</option>
-            <option value=2023>2023</option>
-            <option value=2024>2024</option>
-            <option value=2025>2025</option>
-            <option value=2026>2026</option>
+                <option value="">passout year</option>
+                <option value=2020>2020</option>
+                <option value=2021>2021</option>
+                <option value=2022>2022</option>
+                <option value=2023>2023</option>
+                <option value=2024>2024</option>
+                <option value=2025>2025</option>
+                <option value=2026>2026</option>
             </select>
-                
+
             <select name="btech_year" id="year">
-            <option value="">Btech year</option>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
+                <option value="">Btech year</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
             </select>
-          
-          <select name="sem" id="sem" value="first" >
-            <option value="">Semester</option>
-            <option value="first">ONE</option>
-            <option value="second">TWO</option>
-          </select>
-        <br>
-        <br>
 
-           <input type="checkbox" name="branch_selection" id="" value="cse">CSE </input>
-           <input type="checkbox" name="branch_selection" id="" value="ece">ECE </input>
-           <input type="checkbox" name="branch_selection" id="" value="eee">EEE </input>
-           <input type="checkbox" name="branch_selection" id="" value="mech">MECH </input>
-           <input type="checkbox" name="branch_selection" id="" value="civil">CIVIL </input>
-        <br>
-        <br>
-        
-          <select name="criteria_btech" id="criteria" value=60.00 required>
-            <option value="">Btech-Percentage</option>
-            <option value=60.00>abv-60%</option>
-            <option value=65.00>abv-65%</option>
-            <option value=70.00>abv-70%</option>
-            <option value=75.00>abv-75%</option>
-            <option value=80.00>abv-80%</option>
-            <option value=85.00>abv-85%</option>
-            <option value=90.00>abv-90%</option>
-            <option value=95.00>abv-95%</option> 
-          </select>
-          
-          <select name="criteria_inter" id="criteria_inter" value=60.00 required>
-            <option value="">Inter-Percentage</option>
-            <option value=60.00>abv-60%</option>
-            <option value=65.00>abv-65%</option>
-            <option value=70.00>abv-70%</option>
-            <option value=75.00>abv-75%</option>
-            <option value=80.00>abv-80%</option>
-            <option value=85.00>abv-85%</option>
-            <option value=90.00>abv-90%</option>
-            <option value=95.00>abv-95%</option> 
-          </select>
-        
-          
-          <select name="criteria_tenth" id="criteria_tenth" value=60.00 required>
-            <option value="">Tenth-Percentage</option>
-            <option value=60.00>abv-60%</option>
-            <option value=65.00>abv-65%</option>
-            <option value=70.00>abv-70%</option>
-            <option value=75.00>abv-75%</option>
-            <option value=80.00>abv-80%</option>
-            <option value=85.00>abv-85%</option>
-            <option value=90.00>abv-90%</option>
-            <option value=95.00>abv-95%</option> 
-          </select><br>
-        <div id = "flex">
-          <select name="backlog-selection" id="backlog-selection" value=0 required>
-            <option value="">Backlogs</option>
-            <option value=0>0</option>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-          </select>
-        <br>
-        <br>
-          <select name="gender" id="gender" value="Male" required>
-            <option value="">Gender</option>
-            <option value="Male">MALE</option>
-            <option value="Female">FEMALE</option>
-            <option value="Both">Both</option>
-          </select>
-        <br>
-     </div>
-        <br>
-          <button type="submit">Push into logs</button>
-      </div>
-    
+            <select name="sem" id="sem" value="first">
+                <option value="">Semester</option>
+                <option value="first">ONE</option>
+                <option value="second">TWO</option>
+            </select>
+        </div>
+        <div>
+            <label>CSE</label>
+            <input type="checkbox" name="branch_selection" id="checkbox" value="cse"/>
+            <label>ECE</label>
+            <input type="checkbox" name="branch_selection" id="checkbox" value="ece"/>
+            <label>EEE</label>
+            <input type="checkbox" name="branch_selection" id="checkbox" value="eee"/>
+            <label>MECH</label>
+            <input type="checkbox" name="branch_selection" id="checkbox" value="mech"/>
+            <label>CIVIL</label>
+            <input type="checkbox" name="branch_selection" id="checkbox" value="civil"/>
+        </div>
+        <div>
+            <select name="criteria_btech" id="criteria" value=60.00 required>
+                <option value="">Btech-Percentage</option>
+                <option value=60.00>abv-60%</option>
+                <option value=65.00>abv-65%</option>
+                <option value=70.00>abv-70%</option>
+                <option value=75.00>abv-75%</option>
+                <option value=80.00>abv-80%</option>
+                <option value=85.00>abv-85%</option>
+                <option value=90.00>abv-90%</option>
+                <option value=95.00>abv-95%</option>
+            </select>
+            <select name="criteria_inter" id="criteria_inter" value=60.00 required>
+                <option value="">Inter-Percentage</option>
+                <option value=60.00>abv-60%</option>
+                <option value=65.00>abv-65%</option>
+                <option value=70.00>abv-70%</option>
+                <option value=75.00>abv-75%</option>
+                <option value=80.00>abv-80%</option>
+                <option value=85.00>abv-85%</option>
+                <option value=90.00>abv-90%</option>
+                <option value=95.00>abv-95%</option>
+            </select>
+            <select name="criteria_tenth" id="criteria_tenth" value=60.00 required>
+                <option value="">Tenth-Percentage</option>
+                <option value=60.00>abv-60%</option>
+                <option value=65.00>abv-65%</option>
+                <option value=70.00>abv-70%</option>
+                <option value=75.00>abv-75%</option>
+                <option value=80.00>abv-80%</option>
+                <option value=85.00>abv-85%</option>
+                <option value=90.00>abv-90%</option>
+                <option value=95.00>abv-95%</option>
+            </select>
+        </div>
+        <div>
+            <select name="backlog-selection" id="backlog-selection" value=0 required>
+                <option value="">Backlogs</option>
+                <option value=0>0</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+            </select>
+            <select name="gender" id="gender" value="Male" required>
+                <option value="">Gender</option>
+                <option value="Male">MALE</option>
+                <option value="Female">FEMALE</option>
+                <option value="Both">Both</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Push into logs</button>
+        </div>
     </form>
-
+    </div>
 </body>
 
 </html>
