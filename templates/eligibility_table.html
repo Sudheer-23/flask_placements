@@ -15,6 +15,7 @@ body {
 }
 
 nav {
+  display: flexbox;
   position: relative;
   width: 100%;
   background: #34495e;
@@ -45,12 +46,11 @@ a:hover {
 }
 
 table {
-  overflow-x: auto;
-    display: flex;
+  margin-bottom: 10px;
+    display: flexbox;
     justify-content: center;
     border-collapse: collapse;
     width: 100%;
-    height: 100%;
     border: 1px solid #bdc3c7;
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
 }
@@ -58,6 +58,7 @@ table {
 tr {
     transition: all .2s ease-in;
     cursor: pointer;
+    overflow: hidden;
 }
 
 th,td {
@@ -92,6 +93,8 @@ h1{
         text-shadow: none;
     }
 }
+
+
 
 
 tr:hover {
@@ -141,12 +144,13 @@ input[type="button"] {
         <a href="{{url_for('student_table')}}">Students-data</a>
         <a href="{{url_for('company_tables')}}">Company-logs</a>
         <a href="{{url_for('tables')}}">Tables</a>
+        <a href="{{url_for('placed_students')}}">Placement Report</a>
         <div class="animation start-home"></div>
     </nav>
     </center>
 
     <h1>{{c}}</h1>
-<div>
+<div class="table">
     <table class="content-table" id="myTable">
         
             <tr id="header">
@@ -186,6 +190,16 @@ input[type="button"] {
             {% endfor %}
         
     </table>
+
+    <div>
+      {{py}}
+      <br>
+      {{by}}
+      <br>
+      {{branches}}
+      <br>
+      {{sem}}
+    </div>
 
     </div>
 

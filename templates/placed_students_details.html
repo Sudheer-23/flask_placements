@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <center>
+        <h2>Page to display all the company tables dynamically as a drop down</h2>
+
+        <form action="/display_students" method="POST">
+        
+            <select name="company_tables" id="year">
+                <option value="">Companies Visted For Drives</option>
+                {% for i in table_names %}
+                    <option value={{i}}> {{i}} </option>
+                {% endfor %}
+            </select>
+
+            <select name="Rounds" id="filter" required>
+                <option value="">Rounds Filter</option>
+                <option value="None">None</option>
+                <option value="Round 1">Round 1</option>
+                <option value="Round 2">Round 2</option>
+                <option value="Round 3">Round 3</option>
+                <option value="Round 4">Round 4</option>
+                <option value="Round 5">Round 5</option>
+                <option value="Round 6">Round 6</option>
+                <option value="Round 7">Round 7</option>
+                <option value="Selected">Selected</option>
+            </select>
+
+            <br> <br>
+
+            <button type="submit">SUBMIT</button>
+
+        </form>
+            
+        
+    </center>
+
+    
+</body>
+</html>
+
+<!-- This particular code of html has been done just to display the slected students -->
+
+<!--     <center>
+
+    <h2>This Page displays the students who got placed</h2>
+
+    {% for i in table_names %}
+        {{i}}
+        <br>
+    {% endfor %} 
+
+    
+    {% for i in data %}
+    <hr>
+    <h2>Details Of Students in : {{i}}</h2>
+    <hr>
+    <form action="/display_students/{{i}}" method="POST">
+    <select name="Rounds" id="filter" required>
+        <option value="">Rounds Filter</option>
+        <option value="None">None</option>
+        <option value="Round 1">Round 1</option>
+        <option value="Round 2">Round 2</option>
+        <option value="Round 3">Round 3</option>
+        <option value="Round 4">Round 4</option>
+        <option value="Round 5">Round 5</option>
+        <option value="Round 6">Round 6</option>
+        <option value="Round 7">Round 7</option>
+        <option value="Selected">Selected</option>
+    </select>
+
+    <button type="submit">SUBMIT</button>
+    </form>
+    <br>
+    <br>
+    {% for j in data[i] %}
+        {{j}}
+        <br>
+    {% endfor %}
+    <br>
+{% endfor %}
+
+</center> -->

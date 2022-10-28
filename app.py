@@ -1,8 +1,9 @@
 # pandas is a library with which we can perform extraction of  data, sending data to database, reading excel files etc.
+
 import pandas as pd
 
 # importing flask files do that we can implement the functionality for the site
-from flask import Flask, request, render_template, redirect, get_flashed_messages, flash, url_for
+from flask import Flask, request, render_template, redirect, get_flashed_messages, flash, url_for,session
 
 # imported flask forms for submitting the data
 from flask_wtf import FlaskForm
@@ -27,11 +28,9 @@ from sqlalchemy  import Float, Numeric, String, create_engine
 import sqlalchemy
 import mysql.connector as c
 
-
-
 app = Flask(__name__)
-app.secret_key = "Sudheer"
-app.config['UPLOAD_FOLDER'] = "attachments"
+app.secret_key = "SudheerFUKA"
+app.config['UPLOAD_FOLDER'] = "C:/Sudheer/flask_placements/"
 app.config['UPLOAD_FOLDER_1'] = "students_data"
 app.config['UPLOAD_FOLDER_2'] = "updated_students_data"
 
@@ -45,9 +44,6 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
 con1 = c.connect(host = "localhost",user = "root",password = "sudheer123",database = "students_data")
-
-
-
 
 # This class is for creating the flask forms (attachment upload)
 class Upload_attachment(FlaskForm):
@@ -65,6 +61,53 @@ class Upload_excel_file(FlaskForm):
 def home():
     return render_template('home_page.html')
 
+@app.route('/signin', methods = ['GET','POST'])
+def signin():
+    if request.method=='GET':
+        return render_template('signin.html')
+    email = request.form['email']
+    passw = request.form['password']
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    cur.execute("select pwd from admindata where email = %s;",(email))
+    data = cur.fetchall()
+    con.commit()
+    cur.close()
+    d = data[0]
+    if passw == d['pwd']:
+        return render_template('home.html')
+    else:
+        return render_template('signin.html')
+
+@app.route('/signup',methods = ['GET','POST'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+    name   = request.form['fullname']
+    email  = request.form['email']
+    mobile = request.form['number']
+    gender = request.form['gender']
+    pass1  = request.form['password1']
+    pass2  = request.form['password2']
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    cur.execute('select email from admindata;')
+    data = cur.fetchall()
+    con.commit()
+    cur.close()
+    if email in data:
+        return render_template('signup.html',msg = 'Looks like you are already registered')
+    elif pass1 == pass2:
+         con = mysql.connect()
+         cur = con.cursor(pymysql.cursors.DictCursor)
+         cur.execute('INSERT INTO admindata(name,email,mobile,gender,pwd) VALUES(%s,%s,%s,%s,%s);',(name,email,mobile,gender,pass2))
+         con.commit()
+         cur.close()
+         return render_template('signup.html',msg = "successfully Registered")
+    else:
+        return render_template('signup.html',msg ='Password Miss match')
+
+
 @app.route('/display_eligibility_filters_form')
 def display_eligibility_filters_form():
     return render_template('eligibility_filters_form.html')
@@ -75,8 +118,11 @@ def display_eligibility():
         pass
         
     elif request.method == 'POST':
-
         c = request.form['company']
+        py = request.form['passout_year']
+        by = request.form['btech_year']
+        sem = request.form['sem']
+        branches = request.form.getlist('branch_selection')
         per_b = request.form['criteria_btech']
         per_i = request.form['criteria_inter']
         per_t = request.form['criteria_tenth']
@@ -88,11 +134,11 @@ def display_eligibility():
         if (gen == 'Male') or (gen == 'Female'):
             cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_Percentage>={per_i} AND tenth_percentage>={per_t} AND gender='{gen}' AND total_backlogs>={b};".format(per_b=per_b,per_i=per_i,per_t=per_t,gen=gen,b=b))
         else:
-            cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_percentage>={per_i} AND tenth_percentage>={per_t} AND total_backlogs>={b};".format(per_b=per_b,per_i=per_i,per_t=per_t,b=b))
+            cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_percentage>={per_i} AND tenth_percentage>={per_t} AND total_backlogs>={b} AND pass_out_year = {py} ;".format(per_b=per_b,per_i=per_i,per_t=per_t,b=b,py=py))
         data_eligible = cur.fetchall()
         con.commit()
         cur.close()
-        return render_template('eligibility_table.html', data = data_eligible, c = " Eligible Students List For {}".format(c))
+        return render_template('eligibility_table.html', data = data_eligible, c = " Eligible Students List For {}".format(c),py=py,by=by,branches=branches,sem=sem)
 
 
 # This route is for uploading the excel sheet of students data which has to be inserted into the database 
@@ -144,10 +190,6 @@ def upload_into_updated_students_data():
         os.remove(path)  # (Remove the file, 'sheet.xlsx')
 
         return "Plzz go back and click on update"
-
-        
-
-        
         
     return render_template('upload_sheet2.html',form=form)
 
@@ -254,7 +296,6 @@ def company_logs():
         return "Hello"
     elif request.method == 'POST':
         c = request.form['company']
-
         c_em = request.form['company_mail']
         c_yr = request.form['passout_year']
         c_btech_yr = request.form['btech_year']
@@ -303,7 +344,7 @@ def company_logs():
             cur.close()
             con.commit()
 
-            return render_template('list_of_company_tables.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
+            return redirect(url_for('company_tables'))
         else:
             
             con = mysql.connect()
@@ -319,9 +360,7 @@ def company_logs():
             data = cur.fetchall()
             cur.close()
             con.commit()
-
-
-            return render_template('list_of_company_tables.html',table_names = table_names,t_name = t_name,c_em = c_em, c_yr = c_yr, c_btech_yr = c_btech_yr, branches =  branches, c_per_b = c_per_b, c_per_i = c_per_i, c_per_t = c_per_t, c_b = c_b, c_gen = c_gen,data = data)
+            return redirect(url_for('company_tables'))
 
 
         '''con = mysql.connect()
@@ -356,29 +395,6 @@ def company_tables():
     print(primary_tables)
     return render_template('list_of_company_tables.html',table_names=company_table_names)
 
-@app.route('/tables')
-def tables():
-    con = mysql.connect()
-    cur = con.cursor(pymysql.cursors.DictCursor)
-    tables_data = cur.execute("SHOW TABLES;")
-    tables_data = cur.fetchall()
-    cur.close()
-    con.commit()
-
-    company_table_names = []
-    primary_tables = []
-    for table in tables_data:
-        if(table['Tables_in_students_data'] != 'sqldb1') and  (table['Tables_in_students_data'] != 'sqldb2') and (table['Tables_in_students_data'] != 'companies'):
-            company_table_names.append(table['Tables_in_students_data'])
-        else:
-            primary_tables.append(table['Tables_in_students_data'])
-
-    print(company_table_names)
-    print(primary_tables)
-    return render_template('list_of_company_tables.html',table_names=primary_tables)
-
-
-
 @app.route('/show_company_table/<name>',methods=['GET','POST'])
 def show_company_table(name):
     con = mysql.connect()
@@ -386,7 +402,6 @@ def show_company_table(name):
     cur.execute('SELECT * FROM {};'.format(name))
     data = cur.fetchall()
     cur.close()
-    
     return render_template('company_wise_details.html',data = data, name = name)
 
 @app.route('/delete_company_table/<name>')
@@ -396,11 +411,10 @@ def delete_company_table(name):
     data = cur.execute("DROP TABLE {};".format(name))
     data = cur.fetchall()
     cur.close()
-    return redirect(url_for('tables'))
+    return redirect(url_for('company_tables'))
 
 @app.route('/update_rounds/<name>',methods=['GET','POST'])
 def update_rounds(name):
-    
     if request.method == 'POST':
         f = request.form['Rounds']
         s1 = request.form.getlist('mycheckbox') 
@@ -422,7 +436,6 @@ def update_rounds(name):
         cur.execute('SELECT * FROM {};'.format(name))
         data = cur.fetchall()
         cur.close()
-    
         return render_template('company_wise_details.html',data = data, name = name)
 
 
@@ -466,7 +479,7 @@ def send_mail():
         con1.commit()
         cursor.close()
 
-        email_li = []
+        email_li = ['sudheer.edu.feb@gmail.com','19nu1a0519@nsrit.edu.in','19nu1a0527@nsrit.edu.in','19nu1a0588@nsrit.edu.in','19nu1a0537@nsrit.edu.in']
         for i in data_mailList:
             s = i[0]
             s = str(s)
@@ -477,40 +490,36 @@ def send_mail():
                 else:
                     email_li.append(s) 
         
-        
-        
         email_id = "lolday606@gmail.com"
         email_pass = "ztskhwqzmvanmjqn"
-        path = "C:/Sudheer/flask_placements/attachments/"
-
+        
         msg = EmailMessage()
         msg['subject'] = "Testing mail feature with smtplib"
         msg['From'] = email_id
         msg['To'] = email_li
         msg.set_content(sam_msg)
 
-        for each_file in os.listdir(path):
-            print(each_file)
-            if(each_file == c):
-                
-                with open(each_file, 'rb') as f:
+        for each_file in os.listdir():
+            s = ''
+            for i in each_file:
+                if(i != '.'):
+                    s = s + i
+                elif(i == '.'):
+                    break
+            
+            if(s == c):
+                print("Hello",c)
+                with open(each_file,'rb') as f:
                     file_data = f.read()
                     file_name = f.name
-                    
                     msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
-
-        with smtplib.SMTP_SSL("smtp.gmail.com",465) as smtp:
+        # important
+        '''with smtplib.SMTP_SSL("smtp.gmail.com",465) as smtp:
             smtp.login(email_id,email_pass)
-            smtp.send_message(msg)
-        
-        
-        
-        
+            smtp.send_message(msg)'''
         return render_template("mail_output.html",mails = email_li,form = form, name = c)
-    
-    
 
-
+# important  
 '''@app.route('/send_company_mails/<name>')
 def send_company_mails(name):
     con = mysql.connect()
@@ -520,6 +529,91 @@ def send_company_mails(name):
     cur.close()
     return render_template('draft_mail.html',data=data)'''
         
+@app.route('/tables')
+def tables():
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    tables_data = cur.execute("SHOW TABLES;")
+    tables_data = cur.fetchall()
+    cur.close()
+    con.commit()
+
+    company_table_names = []
+    primary_tables = []
+    for table in tables_data:
+        if(table['Tables_in_students_data'] != 'sqldb1') and  (table['Tables_in_students_data'] != 'sqldb2') and (table['Tables_in_students_data'] != 'companies'):
+            company_table_names.append(table['Tables_in_students_data'])
+        else:
+            primary_tables.append(table['Tables_in_students_data'])
+    print(company_table_names)
+    print(primary_tables)
+    return render_template('list_of_other_tables.html',table_names=primary_tables)
+
+@app.route('/show_table/<name>',methods=['GET','POST'])
+def show_table(name):
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    cur.execute('SELECT * FROM {};'.format(name))
+    data = cur.fetchall()
+    cur.close()
+    return render_template('table_wise_details.html',data=data,name=name)
+
+@app.route('/placed_students')
+def placed_students():
+
+    con = mysql.connect()
+    cur = con.cursor(pymysql.cursors.DictCursor)
+    tables_data = cur.execute("SHOW TABLES;")
+    tables_data = cur.fetchall()
+    cur.close()
+    con.commit()
+
+    company_table_names = []
+    primary_tables = []
+    for table in tables_data:
+        if(table['Tables_in_students_data'] != 'sqldb1') and  (table['Tables_in_students_data'] != 'sqldb2') and (table['Tables_in_students_data'] != 'companies'):
+            company_table_names.append(table['Tables_in_students_data'])
+        else:
+            primary_tables.append(table['Tables_in_students_data'])
+
+    # this code is to take out each comapny table and then diaplay all the students who got selected
+    '''li = {}
+    for i in company_table_names:
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        data = cur.execute("SELECT * FROM {} WHERE rounds = 'Selected'".format(i))
+        data = cur.fetchall()
+        cur.close()
+        con.commit() 
+        li[i] = data'''
+
+    return render_template('placed_students_details.html',table_names = company_table_names)
+
+@app.route('/display_students',methods=['GET','POST'])
+def display_students():
+    if request.method == 'POST':
+        company = request.form['company_tables']
+        round = request.form['Rounds']
+
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        if(round == 'None'):
+            data = cur.execute("SELECT * FROM {};".format(company))
+        else:
+            data = cur.execute("SELECT * FROM {} WHERE rounds = '{}';".format(company,round))
+        data = cur.fetchall()
+        cur.close()
+        con.commit()
+
+        return render_template('selected_students.html',data=data,round=round,company=company)
+
+@app.route('/new_features')
+def new_features():
+    return render_template('test_table.html')
+
+@app.route('/table_creation_form')
+def table_creation_form():
+    return "hello"
 
 if(__name__) == '__main__':
     app.run(port=2000,debug=True)
