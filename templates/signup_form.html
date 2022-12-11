@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/signup_form.css">
+    <title>Register</title>
+</head>
+
+<body>
+    <div class="main-login">
+        <div class="login-contain">
+            <div class="right-side">
+              <h1>Register page</h1>
+                <form method="POST" action="{{url_for('signup')}}">
+                    <input type="text" placeholder="Name" name="fullname">
+                    <input type="text" placeholder="Email" name ='email'>
+                    <input type="text" placeholder="Number" name ='number'>
+                    
+                    <label for=""><input type="radio" placeholder="" name ='gender' value="Male">Male</label>
+                    <label for=""><input type="radio" placeholder="" name ='gender' value="Female">Female</label>
+                    <input type="password" placeholder="password" name="password1">
+                    <input type="password" placeholder="confirm password" name="password2">
+                    <button type="submit" id="sbt-btn">Signup</button>
+                    {{msg}}
+                    {{data}}
+                    {{l}}
+                    <a href="{{url_for('student_login')}}"><p>Already have an account?login</p></a>
+                </form>
+            </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

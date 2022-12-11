@@ -1,0 +1,200 @@
+body{
+    font-family: 'open sans', sans-serif;
+    background: #fff;
+    margin: 0;
+  }
+  
+
+a:hover {
+    width: 100%;
+    padding: 15px;
+    background: #1abc9c;
+    border-radius: 8px;
+    transition: all .5s ease 0s;
+}
+    .main-login {
+        min-height: 100vh;
+        max-width: 100vw;
+        overflow-x: hidden;
+        background: linear-gradient(to right, #fff 50%, #fff 50%);
+      }
+      
+      .login-contain {
+        height: 75vh;
+        width: 70%;
+        background: linear-gradient(to right bottom, #ffffff,#ffffff);
+        border-radius: 1rem;
+        margin: 2rem auto;
+        box-shadow: 0.5rem 0.5rem 0.5rem gray;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .left-side,
+      .right-side {
+        margin: 2rem 2rem;
+        box-shadow: 0.5rem 0.5rem 2rem -1rem rgb(58, 57, 57);
+        height: 80%;
+        width: 100%;
+      }
+
+      .left-side{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #ffffff;
+      }
+      
+      .right-side {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #ffffff;
+      }
+      
+      input {
+        display: block;
+        border: none;
+        height: 2rem;
+        width: 70%;
+        margin: auto;
+        margin-bottom: 1.5rem;
+        padding: 0.2rem 1rem;
+        outline: none;
+        border-radius: 10px;
+      }
+      
+    
+      
+      #sbt-btn {
+        width: 20%;
+        background: #0000ff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 0.4rem;
+        border-radius: 50px;
+        display: block;
+        margin: auto;
+      }
+      
+      #sbt-btn:hover {
+        background-color: #dc2626;
+      }
+      
+      h3 {
+        margin-left: 3rem;
+        color: black;
+        float: left;
+      }
+      img{
+        width: 300px;
+        display: flex;
+        justify-content: center;
+        margin: auto;
+      }
+      
+      h1 {
+        display: flex;
+        justify-content: center;
+        color: black;
+        /*animation: neon 3s infinite;*/
+    }
+    @keyframes neon {
+
+      0%,
+      39%,
+      41%,
+      59%,
+      61%,
+      100% {
+          text-shadow: white 0 0 12px,
+              #04d29e 0 0 24px,
+              #00ffcc 0 0 36px;
+      }
+
+      40%,
+      60% {
+          text-shadow: none;
+      }
+  }
+    
+      p{
+        text-align: center;
+      }
+      @keyframes neon {
+
+        0%,
+        39%,
+        41%,
+        59%,
+        61%,
+        100% {
+            text-shadow: white 0 0 12px,
+                #04d29e 0 0 24px,
+                #00ffcc 0 0 36px;
+        }
+  
+        40%,
+        60% {
+            text-shadow: none;
+        }
+    }
+      
+        p{
+          text-align: center;
+        }
+        
+        .hero .dynamic-txt {
+            height: 90px;
+            line-height: 90px;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .dynamic-txt li {
+            list-style: none;
+            color: #1abc9c;
+            font-size: 80px;
+            font-weight: 500;
+            position: relative;
+            top: 0;
+            animation: slide 16s steps(4) infinite;
+        }
+        
+        @keyframes slide {
+            100% {
+                top: -360px;
+            }
+        }
+        
+        .dynamic-txt li span {
+            position: relative;
+            line-height: 90px;
+        }
+        
+        .dynamic-txt li span::after {
+        
+            content: "";
+            position: absolute;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #fff;
+            border-left: 2px solid #16f37d;
+            animation: typing 4s steps(20) infinite;
+        }
+        
+        @keyframes typing {
+        
+            40%,
+            60% {
+                left: calc(100% + 30px);
+            }
+        
+            100% {
+                left: 0;
+            }
+        }
+        

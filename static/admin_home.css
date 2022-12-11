@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+
+body {
+    font-family: 'open sans', sans-serif;
+    background: #fff;
+    margin: 0;
+}
+
+nav {
+    position: relative;
+    width: 100%;
+    background: #34495e;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
+}
+
+nav a {
+    display: flexbox;
+    margin: 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    line-height: 50px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+a:hover {
+    width: 100%;
+    padding: 15px;
+    background: #1abc9c;
+    border-radius: 8px;
+    transition: all .5s ease 0s;
+}
+
+
+.heading {
+    display: flex;
+    justify-content: center;
+    color: #000;
+    text-decoration: none;
+    font-style: italic;
+    padding: 20px 50px;
+    border: 3px solid #3c67e3;
+    border-radius: 10px;
+}
+
+.heading:hover {
+    animation: pulsate 1s ease-in-out;
+}
+
+@keyframes pulsate {
+    0% {
+        box-shadow: 0 0 25px #5ddcff, 0 0 50px #4e00c2
+    }
+}
+
+.hero {
+    display: flex;
+    justify-content: center;
+}
+
+.hero .static-txt {
+    color: #000;
+    font-size: 60px;
+}
+
+.static-txt {
+    margin-top: 15px;
+}
+
+.hero .dynamic-txt {
+    height: 90px;
+    line-height: 90px;
+    overflow: hidden;
+}
+
+.dynamic-txt li {
+    list-style: none;
+    color: #1abc9c;
+    font-size: 60px;
+    font-weight: 500;
+    position: relative;
+    top: 0;
+    animation: slide 12s steps(4) infinite;
+}
+
+@keyframes slide {
+    100% {
+        top: -360px;
+    }
+}
+
+.dynamic-txt li span {
+    position: relative;
+    line-height: 90px;
+}
+
+.dynamic-txt li span::after {
+
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border-left: 2px solid #16f37d;
+    animation: typing 3s steps(20) infinite;
+}
+
+@keyframes typing {
+
+    40%,
+    60% {
+        left: calc(100% + 30px);
+    }
+
+    100% {
+        left: 0;
+    }
+}
+
+.container {
+    margin: auto;
+    padding-top: 6rem;
+    width: 300px;
+    height: 300px;
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+}
+
+.cubic {
+    width: 300px;
+    height: 300px;
+    transform-style: preserve-3d;
+    transform: translateZ(-200px) rotateZ(180deg) rotateX(45deg);
+    animation: spin 3s infinite linear;
+}
+
+.cubic .surface {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    background: #fff;
+    backface-visibility: hidden;
+}
+
+.cubic .one {
+    transform: rotateY(0deg) translateZ(150px);
+}
+
+.cubic .two {
+    transform: rotateX(180deg) translateZ(150px);
+}
+
+.cubic .three {
+    transform: rotateY(90deg) translateZ(150px);
+}
+
+.cubic .four {
+    transform: rotateY(-90deg) translateZ(150px);
+}
+
+.cubic .five {
+    transform: rotateX(90deg) translateZ(150px);
+}
+
+.cubic .six {
+    transform: rotateX(-90deg) translateZ(150px);
+}
+
+@keyframes spin {
+    0% {
+        transform: translateZ(-100px) rotateY(360deg) rotateZ(0deg) rotateX(45deg);
+    }
+
+    50% {
+        transform: translateZ(-100px) rotateY(180deg) rotateZ(180deg) rotateX(45deg);
+    }
+
+    100% {
+        transform: translateZ(-100px) rotateY(0deg) rotateZ(360deg) rotateX(45deg);
+    }
+}

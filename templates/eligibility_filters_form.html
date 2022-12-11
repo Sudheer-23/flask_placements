@@ -17,7 +17,7 @@
 
 body {
     font-family: 'open sans', sans-serif;
-    background: #2c3e50;
+    background: #fff;
     background-size: cover;
     background-repeat: no-repeat;
     margin: 0;
@@ -27,6 +27,7 @@ nav {
     position: relative;
     width: 100%;
     background: #34495e;
+    color: #fff;
     border-radius: 8px;
     font-weight: 600;
     box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .1);
@@ -57,7 +58,7 @@ h1 {
     font-style: italic;
     display: flex;
     justify-content: center;
-    color: white;
+    color: black;
     animation: neon 3s infinite;
     margin-bottom: 1rem;
 }
@@ -95,15 +96,19 @@ form{
 .box{
     margin-top: 1rem;
     width: 50%;
-    border: 1px solid black;
     background:none;
     height:50%;
     padding: 5%;
-    border: 3px solid;
+    
+    width: 50%;
+    background:none;
+    height:50%;
+    padding: 5%;
+    box-shadow: 10px 20px 10px  16px rgb(248, 244, 244);
     border-radius: 10px;
     backdrop-filter: blur(10px); 
-    border-image: linear-gradient(var(--angle), #00cc99, #eef0f5, #6600ff,#ef4444,#fef08a)1;
-    animation: 5s rotate linear infinite;
+   /* border-image: linear-gradient(var(--angle), #00cc99, #eef0f5, #6600ff,#ef4444,#fef08a)1;*/
+    /*animation: 5s rotate linear infinite;*/
     --angle: 0deg;
 }
 
@@ -137,7 +142,7 @@ select{
 }
 
 label{
-    color: white;
+    color: black;
 }
 #company{
     width: 100%;

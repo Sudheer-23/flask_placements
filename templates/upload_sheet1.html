@@ -23,7 +23,7 @@
 
 body {
     font-family: 'open sans', sans-serif;
-    background: #2c3e50;
+    background: #fff;
     background-size: cover;
     background-repeat: no-repeat;
     margin: 0;
@@ -66,9 +66,9 @@ a:hover {
     --angle: 0deg;
     width: 50%;
     height: 50%;
-    border: 5px solid;
-    border-image: linear-gradient(var(--angle), #00cc99, #eef0f5, #6600ff,#ef4444,#fef08a)1;
-    animation: 5s rotate linear infinite;
+  box-shadow: 5px 4px 5px whitesmoke;
+   /* border-image: linear-gradient(var(--angle), #00cc99, #eef0f5, #6600ff,#ef4444,#fef08a)1;*/
+    /*animation: 5s rotate linear infinite;*/
 }
 
 @keyframes rotate {
@@ -98,7 +98,7 @@ h1{
     font-style: italic;
     display: flex;
     justify-content: center;
-    color: white;
+    color: black;
     animation: neon 3s infinite;
 }
 
@@ -128,17 +128,29 @@ input{
     border: 1px solid;
     color: white;
 }
-input[type="submit" i] {
+
+
+
+input[type="submit"] {
     background-color: #00cc99;
-            color: white;
-            padding: 15px;
-            border-radius: 20px;
-            border-style: none;
-            cursor: pointer;
-        }
-        input[type="file"]  {
+    color: white;
+    padding: 15px;
+    border-radius: 20px;
+    border-style: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+input[type="submit" ] {
+
+color: white;
+
+}
+
+
+    input[type="file"]  {
             padding: 30px;
-        } 
+    } 
 
     </style>
 </head>

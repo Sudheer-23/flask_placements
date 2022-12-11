@@ -59,30 +59,33 @@ class Upload_excel_file(FlaskForm):
 # This route is for the home page that has to be loaded when the site opens
 @app.route('/')
 def home():
-    return render_template('home_page.html')
+    return render_template('home_2.html')
 
 @app.route('/signin', methods = ['GET','POST'])
 def signin():
     if request.method=='GET':
-        return render_template('signin.html')
-    email = request.form['email']
-    passw = request.form['password']
-    con = mysql.connect()
-    cur = con.cursor(pymysql.cursors.DictCursor)
-    cur.execute("select pwd from admindata where email = %s;",(email))
-    data = cur.fetchall()
-    con.commit()
-    cur.close()
-    d = data[0]
+        return render_template('admin_login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        passw = request.form['password']
+        print(email)
+        print(passw)
+        con = mysql.connect()
+        cur = con.cursor(pymysql.cursors.DictCursor)
+        cur.execute("select pwd from admindata where email = %s;",(email))
+        data = cur.fetchall()
+        con.commit()
+        cur.close()
+        d = data[0]
     if passw == d['pwd']:
-        return render_template('home.html')
+        return render_template("home_page.html")
     else:
-        return render_template('signin.html')
+        return render_template('admin_login.html',msg ="Incorrect Email Or Password")
 
 @app.route('/signup',methods = ['GET','POST'])
 def signup():
     if request.method == 'GET':
-        return render_template('signup.html')
+        return render_template('signup_form.html')
     name   = request.form['fullname']
     email  = request.form['email']
     mobile = request.form['number']
@@ -90,22 +93,37 @@ def signup():
     pass1  = request.form['password1']
     pass2  = request.form['password2']
     con = mysql.connect()
-    cur = con.cursor(pymysql.cursors.DictCursor)
-    cur.execute('select email from admindata;')
-    data = cur.fetchall()
+    cur = con.cursor()
+    cur.execute('select COUNT(name) FROM admindata;')
+    len = cur.fetchall()[0]
     con.commit()
     cur.close()
+    
+    if(len[0] > 0): 
+        con = mysql.connect()
+        cur = con.cursor()
+        cur.execute('select email from admindata;')
+        data = cur.fetchall()[0]
+        con.commit()
+        cur.close()
+    else:
+        con = mysql.connect()
+        cur = con.cursor()
+        cur.execute('INSERT INTO admindata(name,email,mobile,gender,pwd) VALUES(%s,%s,%s,%s,%s);',(name,email,mobile,gender,pass2))
+        con.commit()
+        cur.close()
+
     if email in data:
-        return render_template('signup.html',msg = 'Looks like you are already registered')
+        return render_template('signup_form.html',msg = 'Looks like you are already registered')
     elif pass1 == pass2:
          con = mysql.connect()
-         cur = con.cursor(pymysql.cursors.DictCursor)
+         cur = con.cursor()
          cur.execute('INSERT INTO admindata(name,email,mobile,gender,pwd) VALUES(%s,%s,%s,%s,%s);',(name,email,mobile,gender,pass2))
          con.commit()
          cur.close()
-         return render_template('signup.html',msg = "successfully Registered")
+         return render_template('signup_form.html',msg = "successfully Registered",data = data,l = len)
     else:
-        return render_template('signup.html',msg ='Password Miss match')
+        return render_template('signup_form.html',msg ='Password Miss match')
 
 
 @app.route('/display_eligibility_filters_form')
@@ -134,11 +152,11 @@ def display_eligibility():
         if (gen == 'Male') or (gen == 'Female'):
             cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_Percentage>={per_i} AND tenth_percentage>={per_t} AND gender='{gen}' AND total_backlogs>={b};".format(per_b=per_b,per_i=per_i,per_t=per_t,gen=gen,b=b))
         else:
-            cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_percentage>={per_i} AND tenth_percentage>={per_t} AND total_backlogs>={b} AND pass_out_year = {py} ;".format(per_b=per_b,per_i=per_i,per_t=per_t,b=b,py=py))
+            cur.execute("select * FROM sqldb1 WHERE btech_percentage>={per_b} AND inter_percentage>={per_i} AND tenth_percentage>={per_t} AND total_backlogs>={b};".format(per_b=per_b,per_i=per_i,per_t=per_t,b=b))
         data_eligible = cur.fetchall()
         con.commit()
         cur.close()
-        return render_template('eligibility_table.html', data = data_eligible, c = " Eligible Students List For {}".format(c),py=py,by=by,branches=branches,sem=sem)
+        return render_template('eligibility_table.html', data = data_eligible, c = " Eligible Students List For {}".format(c),sem=sem)
 
 
 # This route is for uploading the excel sheet of students data which has to be inserted into the database 
@@ -514,9 +532,9 @@ def send_mail():
                     file_name = f.name
                     msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
         # important
-        '''with smtplib.SMTP_SSL("smtp.gmail.com",465) as smtp:
+        with smtplib.SMTP_SSL("smtp.gmail.com",465) as smtp:
             smtp.login(email_id,email_pass)
-            smtp.send_message(msg)'''
+            smtp.send_message(msg)
         return render_template("mail_output.html",mails = email_li,form = form, name = c)
 
 # important  
@@ -614,6 +632,36 @@ def new_features():
 @app.route('/table_creation_form')
 def table_creation_form():
     return "hello"
+
+@app.route('/quiz_form',methods=["GET","POST"])
+def quiz_form():
+    return render_template('quiz_form.html')
+
+@app.route('/Student_profile')
+def Student_profile():
+    return render_template('Student_profile.html')
+
+@app.route('/signup_form',methods=['GET','POST'])
+def signup_form():
+    return render_template('signup_form.html')
+
+@app.route('/home_2',methods=['GET','POST'])
+def home_2():
+    return render_template('home_2.html')
+
+@app.route('/admin_login')
+def admin():
+    return render_template('admin_login.html')
+
+@app.route('/admin_home',methods=['GET','POST'])
+def admin_home():
+    return render_template('admin_home.html')
+
+@app.route('/student_login',methods=['GET','POST'])
+def student_login():
+    return render_template('student_login.html')
+
+
 
 if(__name__) == '__main__':
     app.run(port=2000,debug=True)

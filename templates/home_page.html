@@ -13,9 +13,10 @@
 
         body{
         font-family: 'open sans', sans-serif;
-        background: #2c3e50;
-        margin: 0;
+        background: #fff;
+        overflow: auto;
       }
+
       nav {
         position: relative;
         width: 100%;
@@ -34,6 +35,7 @@
         text-decoration: none;
         line-height: 50px;
         position: relative;
+        overflow: auto;
         z-index: 1;
         text-align: center;
     }
@@ -46,33 +48,7 @@
         transition: all .5s ease 0s;
     }
 
-    .heading {
-            display: flex;
-            justify-content: center;
-            color: #fff;
-            text-decoration: none;
-            font-style: italic;
-            padding: 20px 50px;
-            border: 3px solid #3c67e3;
-            border-radius: 10px;
-        }
-
-        .heading:hover {
-            animation: pulsate 1s ease-in-out;
-        }
-
-        @keyframes pulsate {
-            0% {
-                box-shadow: 0 0 25px #5ddcff, 0 0 50px #4e00c2
-            }
-        }
-        h1{
-    font-style: italic;
-    display: flex;
-    justify-content: center;
-    color: white;
-    animation: neon 3s infinite;
-}
+   
 
 @keyframes neon{
     0%,39%,41%,59%,61%,100%{
@@ -92,7 +68,7 @@
         }
 
         .hero .static-txt {
-            color: #fff;
+            color: #000;
             font-size: 60px;
         }
 
@@ -134,7 +110,7 @@
             left: 0;
             height: 100%;
             width: 100%;
-            background: #2c3e50;
+            background: #fff;
             border-left: 2px solid #16f37d;
             animation: typing 3s steps(20) infinite;
         }
@@ -239,7 +215,7 @@
     </nav>
     </center>
 
-    <h1 class="heading">SUBHAGACHATHI</h1>
+    
 
     <div class="hero">
         <div class="static-txt">Our Top</div>
